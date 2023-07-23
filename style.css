@@ -1,0 +1,34 @@
+.scrn {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    overflow: auto;
+    overflow-wrap: break-word;
+    scroll-behavior: smooth;
+}
+@keyframes scrnClose {
+    0% {left: 0%}
+    100% {left: -100%}
+}
+@keyframes splash {
+    0% {scale: 0%;}
+    100% {scale: 100%;}
+}
+@keyframes navOpen {
+    0% {left: -75%}
+    100% {left: 0%}
+}
+@keyframes fadeIn {
+    0% {opacity: 0%;}
+    100% {opacity: 100%;}
+}
+@keyframes fadeOut {
+    0% {opacity: 100%;}
+    100% {opacity: 0%;}
+}
+@keyframes navClose {
+    0% {left: 0%}
+    100% {left: -75%}
+}

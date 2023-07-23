@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Drukgyel HSS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+  </head>
+  <body>
+    <div id="splash" class="scrn" style="background-color: #0989EC;">
+      <div id="splashLogo" style="width: 75%; height: 75%; position: absolute; left: 12.5%; top: 12.5%; background-image: url('assets/logo.png'); background-position: center; background-repeat: no-repeat; background-size: contain; animation-name: splash; animation-duration: 0.75s; animation-fill-mode: forwards; animation-timing-function: cubic-bezier(0, 0.75, 1);"></div>
+    </div>
+  </body>
+  <script>
+document.getElementById("splashLogo").onanimationend = function() {
+    setTimeout(function() {
+      if ("Drukgyel-HSS" in sessionStorage == false) {
+        sessionStorage["Drukgyel-HSS"] = true
+        window.open("School Profile/index.html", "_self")
+      } else {
+        window.open(sessionStorage["Drukgyel-HSS"], "_self")
+      }
+    }, 1000)
+}
+  </script>
+</html>

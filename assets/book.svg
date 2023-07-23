@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25"  height="24" ><defs><svg id="icon-import" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path vector-effect="non-scaling-stroke" d="M4.65686 4V20C4.65686 21.1046 5.55229 22 6.65686 22H18.6569C19.7614 22 20.6569 21.1046 20.6569 20V6H17.6569M4.65686 4C4.65686 5.10457 5.55229 6 6.65686 6H17.6569M4.65686 4C4.65686 2.89543 5.55229 2 6.65686 2H17.6569V6" stroke="var(--stroke-color, black)" stroke-width="var(--stroke-width, 1.5)"></path>
+<path vector-effect="non-scaling-stroke" d="M16.6569 19C16.6569 16.7909 14.866 15 12.6569 15C10.4477 15 8.65686 16.7909 8.65686 19" stroke="var(--stroke-color, black)" stroke-width="var(--stroke-width, 1.5)"></path>
+<circle vector-effect="non-scaling-stroke" cx="12.6569" cy="11" r="2" stroke="var(--stroke-color, black)" stroke-width="var(--stroke-width, 1.5)"></circle>
+</svg></defs><use xlink:href="#icon-import" fill-opacity="1" fill="#000000"></use></svg>

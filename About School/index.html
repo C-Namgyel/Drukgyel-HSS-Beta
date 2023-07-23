@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Drukgyel HSS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="icon" type="image/x-icon" href="../assets/logo.png">
+  </head>
+  <body>
+    <div id="homeScrn" class="scrn">
+      <div style="width: 100%; height: 75px; position: fixed; top: 0%; left: 0%; background-image: linear-gradient(#0989EC, #0989EC, #0989EC, #0989EC, white); text-align: center; font-size: 30; color: white; line-height: 62.5px; z-index: 1;">
+        <b>About School</b>
+        <div id="navBtn" onclick="navOpen()" style="position: fixed; height: 20px; width: auto; left: 15px; top: 20px;">
+          <img src="../assets/menu.svg" style="height: 100%;">
+        </div>
+      </div>
+      <div style="width: 90%; position: absolute; left: 5%; top: 80px; text-align: left;">
+Drukgyel Higher Secondary School is located in Jitsephu village of Tsento Geog, at a distance of 12 KM from Paro main at the upper end of the valley. The School lies at an altitude of about 2511m and within the 27°29'05.6" North Latitude and 89°19'56.6" East Longitude.
+<br><br>
+Driving up to the school from Paro along the left bank of the Pachu, one crosses the Kyichu Lhakhang, located on the left,on the way to Drukgyel Dzong. The Fortress is only three kilometers away from the school. The holy monastery - Taktsang lies almost directly opposite the school across the Pachu. Jhumolhari peeps shyly from further north, fanning Drukgyel constantly with her fresh air. The actual site of the school slopes gradually from the Drukgyel Dzong-Paro Road to the river in a south easterly direction.
+<br><br>
+The School was inaugurated on the 7th of April 1994 by the then British High Commissioner for India, Sir Nicholas Fenn and our Education Director Thinley Gyamtsho, along with other senior government officials. Since then, 7th April is always marked as the School Foundation Day during which the COUNCILLORS and IN-CHARGES are conferred badges.
+<br><br>
+The school bears the name of the Dzong as well as our country Druk and for an appropriate reason too. Drukgyel Dzong the "Fortress of the Victorious Drukpas" is distinctively visible from the school. It was here that the Bhutanese under the Great Zhabdrung Ngawang Namgyel had defeated the Tibetans in 1644 and the fortress was built, not only to commemorate the famous victory but also to curb further Tibetan incursions. Roughly translated, the Name of the School means, Druk = Bhutan and Gyel = Victorious - Drukgyel. Aptly the school's motto is 'Ever Victorious'.
+      </div>
+      <!--Nav-->
+      <div id="navBarrier" onclick="navClose()" style="width: 100%; height: 100%; position: fixed; left: 0%; top: 0%; background-color: rgba(0, 0, 0, 0.5); opacity: 50%; z-index: 1;" hidden></div>
+      <div id="navDiv" style="width: 75%; height: 100%; position: fixed; left: -75%; top: 0%; background-color: white; z-index: 1;">
+        <div style="width: 100%; height: 150px; position: absolute; left: 0%; top: 0%; background-color: #0989EC;">
+          <div id="profilePic" style="position: absolute; height: 50px; width: 50px; overflow: hidden; left: 15px; top: 25px; border-radius: 100%; text-align: center; background-image: url('../assets/logo.png'); background-position: center; background-repeat: no-repeat; background-size: cover;"></div>
+          <b id="profileName" style="position: absolute; width: 100%; top: 85px; left: 15px; font-size: 20px; color: white;">Drukgyel HSS</b>
+          <a id="profileEmail" style="position: absolute; width: 100%; top: 110px; left: 15px; font-size: 15px; color: white;">EVER VICTOROUS</a>
+          <button onclick="navClose()" style="position: absolute; top: 15px; right: 15px; background-color: red;">X</button>
+        </div>
+        <div id="navSubHolder" style="position: absolute; left: 15px; top: 175px; width: 90%">
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="../function.js"></script>
+  <script src="../startup.js"></script>
+</html>
