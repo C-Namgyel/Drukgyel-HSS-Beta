@@ -81,7 +81,7 @@ for (let a = 0; a < classes.length; a++) {
             students = data;
 
             //Create the form;
-            div.innerHTML = `<h1 style="text-align: center;">${btnClick.target.innerHTML.replace(" ", "")}</h1><br>Period<br><select id="period"></select><br><br>Subject<br><select id="subject"></select><br><br>Lesson Detail<br><input type="text" id="lesson"><br><br>Subject Teacher (Initial)<input type="text" id="initial"><br><br><div id="divElem" style="width: 100%; overflow: auto; overflow-wrap: break-word; scroll-behavior: smooth; background-color: white; border-radius: 4px;"><table id="formTable" border style="border-collapse: collapse; border-color: black; white-space: nowrap;"><tr><th>Name</th><th>Present</th><th>Leave</th><th>Absent</th><th>On Duty</th></tr></table></div><br><br><button id="submit">Submit</button><br><br><br>`;
+            div.innerHTML = `<h1 style="text-align: center;">${btnClick.target.innerHTML.replace(" ", "")}</h1><br>Period<br><select id="period"></select><br><br>Subject<br><select id="subject"></select><br><br>Lesson Detail<br><input type="text" id="lesson"><br><br>Subject Teacher (Initial)<input type="text" id="initial"><br><br><div id="divElem" style="width: 100%; overflow: auto; overflow-wrap: break-word; scroll-behavior: smooth; background-color: white; border-radius: 4px;"><table id="formTable" border style="border-collapse: collapse; border-color: black; white-space: nowrap;"><tr><th>Name</th><th>Present</th><th>Leave</th><th>Absent</th><th>On Duty</th><th>Short Leave</th><th>Reason (Optional)</th></tr></table></div><br><br><button id="submit">Submit</button><br><br><br>`;
             div.appendChild(closeBtn)
             document.getElementById("period").innerHTML = '<option disabled selected value="">Period</option>'
             for (let p of periods) {
@@ -101,7 +101,7 @@ for (let a = 0; a < classes.length; a++) {
               let name = document.createElement("td");
               name.innerHTML = students[s];
               r.appendChild(name)
-              let opts = ["Present", "Leave", "Absent", "On Duty"];
+              let opts = ["Present", "Leave", "Absent", "On Duty", "Short Leave"];
               for (let o of opts) {
                 let op = document.createElement("td")
                 let rad = document.createElement("input");
@@ -114,6 +114,13 @@ for (let a = 0; a < classes.length; a++) {
                 op.appendChild(rad)
                 r.appendChild(op)
               };
+              let reason = document.createElement("td")
+              let inp = document.createElement("input")
+              inp.id = students[s] + "Reason"
+              inp.placeholder = "Reason"
+              inp.style.whiteSpace = "nowrap"
+              reason.appendChild(inp)
+              r.appendChild(inp)
               document.getElementById("formTable").appendChild(r)
             };
             document.getElementById("divElem").scrollLeft = document.getElementById("divElem").scrollWidth
@@ -122,7 +129,6 @@ for (let a = 0; a < classes.length; a++) {
               let req = false;
               let obj = {};
               for (let c = 0; c < elements.length; c++) {
-                console.log(document.getElementById(elements[c]).value)
                 if (document.getElementById(elements[c]).value == "") {
                   req = true
                   c = elements.length
@@ -134,16 +140,21 @@ for (let a = 0; a < classes.length; a++) {
               if (req == false) {
                 document.getElementById("submit").disabled = true;
                 document.getElementById("submit").innerHTML = "Submitting..."
+                let reasons = {}
                 for (let st of students) {
+                  if (document.getElementById(st + "Reason").value != "") {
+                    reasons[st] = document.getElementById(st + "Reason").value;
+                  }
                   obj[st] = Array.from(document.getElementsByName(st)).find(radio => radio.checked).value
                 }
+                obj.reason = reasons
                 let timestamp = new Date().getTime();
                 set(ref(database, "attendance/" + classOfForm + "/" + timestamp), obj).then(() => {
                   autoClose = true;
                   closeBtn.click()
                   alert("Successfully Submitted")
                 });
-              }
+              } 
             }
           });
       });
