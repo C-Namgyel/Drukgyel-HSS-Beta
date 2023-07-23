@@ -124,7 +124,7 @@ for (let a = 0; a < classes.length; a++) {
               for (let c = 0; c < elements.length; c++) {
                 console.log(document.getElementById(elements[c]).value)
                 if (document.getElementById(elements[c]).value == "") {
-                  req == true
+                  req = true
                   c = elements.length
                   alert("Please fill up everything")
                 } else {
