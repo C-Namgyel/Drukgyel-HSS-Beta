@@ -140,7 +140,7 @@ for (let d = 0; d < navList.length; d++) {
         if (document.getElementById("navBarrier").hidden == false) {
             navClose();
         };
-        window.history.pushState({}, null, window.location.origin + "?page=" + a.value);
+        window.history.pushState({}, null, window.location.search.substring(0, window.location.search.lastIndexOf('?')) + "?page=" + a.value);
     };
 };
 
@@ -152,7 +152,9 @@ var availScreens = ["School Profile", "About School", "Class Attendance", "Annou
 if (par != undefined && availScreens.includes(par)) {
     document.getElementById(par).click();
 } else {
-    window.history.pushState({}, null, window.location.origin + "?page=" + "School Profile");
+    if (window.location.search.lastIndexOf('?') == -1) {
+        window.history.pushState({}, null, window.location.search + "?page=School Profile");
+    }
 };
 
 // Class Attendance
