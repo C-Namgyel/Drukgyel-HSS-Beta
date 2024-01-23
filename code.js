@@ -106,14 +106,14 @@ getAllDatas(function (res) {
 
 // Setup the navigation drawer;
 var navList = [
-    { label: "School Profile", logo: "../assets/home.svg" },
-    { label: "About School", logo: "../assets/home.svg" },
-    { label: "Class Attendance", logo: "../assets/record.svg" },
-    { label: "Announcements", logo: "../assets/announcement.svg" },
-    { label: "Study Report", logo: "../assets/report.svg" },
-    { label: "Staff Photo", logo: "../assets/book.svg" },
-    { label: "Contacts", logo: "../assets/contacts.svg" },
-    { label: "About", logo: "../assets/about.svg" },
+    { label: "School Profile", logo: "./assets/home.svg" },
+    { label: "About School", logo: "./assets/home.svg" },
+    { label: "Class Attendance", logo: "./assets/record.svg" },
+    { label: "Announcements", logo: "./assets/announcement.svg" },
+    { label: "Study Report", logo: "./assets/report.svg" },
+    { label: "Staff Photo", logo: "./assets/book.svg" },
+    { label: "Contacts", logo: "./assets/contacts.svg" },
+    { label: "About", logo: "./assets/about.svg" },
 ];
 for (let d = 0; d < navList.length; d++) {
     let a = document.createElement("a");
