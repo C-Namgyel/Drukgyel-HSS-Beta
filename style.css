@@ -1,3 +1,25 @@
+@keyframes splash {
+    0% {scale: 0%;}
+    100% {scale: 100%;}
+}
+@keyframes navOpen {
+    0% {left: -75%}
+    100% {left: 0%}
+}
+@keyframes navClose {
+    0% {left: 0%}
+    100% {left: -75%}
+}
+@keyframes fadeIn {
+    0% {opacity: 0%;}
+    100% {opacity: 100%;}
+}
+@keyframes fadeOut {
+    0% {opacity: 100%;}
+    100% {opacity: 0%;}
+}
+
+/* Class */
 .scrn {
     width: 100%;
     height: 100%;
@@ -8,27 +30,24 @@
     overflow-wrap: break-word;
     scroll-behavior: smooth;
 }
-@keyframes scrnClose {
-    0% {left: 0%}
-    100% {left: -100%}
+.about {
+    border-width: 0px 0px 1px 0px;
+    border-style: solid;
+    border-color: grey;
+    width: 100%;
+    text-align: left;
 }
-@keyframes splash {
-    0% {scale: 0%;}
-    100% {scale: 100%;}
-}
-@keyframes navOpen {
-    0% {left: -75%}
-    100% {left: 0%}
-}
-@keyframes fadeIn {
-    0% {opacity: 0%;}
-    100% {opacity: 100%;}
-}
-@keyframes fadeOut {
-    0% {opacity: 100%;}
-    100% {opacity: 0%;}
-}
-@keyframes navClose {
-    0% {left: 0%}
-    100% {left: -75%}
+
+/* Elements */
+#announcementBtn {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 10vw;
+    border: none;
+    border-radius: 3vw;
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+    width: 15%;
+    aspect-ratio: 1/1;
 }

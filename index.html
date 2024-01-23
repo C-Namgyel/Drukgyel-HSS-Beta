@@ -1,21 +1,82 @@
-<html>
-  <head>
-    <title>Drukgyel HSS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
-  </head>
-  <body>
-    <div id="splash" class="scrn" style="background-color: #0989EC;">
-      <div id="splashLogo" style="width: 75%; height: 75%; position: absolute; left: 12.5%; top: 12.5%; background-image: url('assets/logo.png'); background-position: center; background-repeat: no-repeat; background-size: contain; animation-name: splash; animation-duration: 0.75s; animation-fill-mode: forwards; animation-timing-function: cubic-bezier(0, 0.75, 1);"></div>
-    </div>
-  </body>
-  <script>
-document.getElementById("splashLogo").onanimationend = function() {
-    setTimeout(function() {
-        sessionStorage["Drukgyel-HSS"] = true
-        window.open("School Profile/", "_self")
-    }, 1000)
-}
-  </script>
+<html lang="en">
+    <head>
+        <title>Drukgyel HSS</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+    </head>
+    <body>
+        <!-- Splash Screen -->
+        <div id="splashDiv" style="position: fixed; left: 0%; top: 0%; width: 100%; height: 100%; background-color: #0989EC; z-index: 5">
+            <div id="splashLogo" style="width: 50%; height: 50%; position: absolute; left: 25%; top: 25%; scale: 0; background-image: url('assets/logo.png'); background-position: center; background-repeat: no-repeat; background-size: contain; animation-name: splash; animation-duration: 0.75s; animation-fill-mode: forwards; animation-timing-function: cubic-bezier(0, 0.75, 1);"></div>
+        </div>
+
+        <!-- Heading -->
+        <div style="width: 100%; height: 75px; position: fixed; top: 0%; left: 0%; background-image: linear-gradient(#0989EC, #0989EC, #0989EC, #0989EC, white); text-align: center; font-size: 30; color: white; line-height: 62.5px; z-index: 1;">
+            <b id="header">School Profile</b>
+            <div id="navBtn" onclick="navOpen()" style="position: fixed; height: 20px; width: auto; left: 15px; top: 20px;">
+                <img src="../assets/menu.svg" style="height: 100%;">
+            </div>
+        </div>
+        <!-- Nav -->
+        <div id="navBarrier" onclick="navClose()" style="width: 100%; height: 100%; position: fixed; left: 0%; top: 0%; background-color: rgba(0, 0, 0, 0.5); opacity: 50%; z-index: 1;" hidden></div>
+        <div id="navDiv" style="width: 75%; height: 100%; position: fixed; left: -75%; top: 0%; background-color: white; z-index: 1;">
+            <div style="width: 100%; height: 150px; position: absolute; left: 0%; top: 0%; background-color: #0989EC;">
+                <div id="profilePic" style="position: absolute; height: 50px; width: 50px; overflow: hidden; left: 15px; top: 25px; border-radius: 100%; text-align: center; background-image: url('../assets/logo.png'); background-position: center; background-repeat: no-repeat; background-size: cover;"></div>
+                <b id="profileName" style="position: absolute; width: 100%; top: 85px; left: 15px; font-size: 20px; color: white;">Drukgyel HSS</b>
+                <a id="profileEmail" style="position: absolute; width: 100%; top: 110px; left: 15px; font-size: 15px; color: white;">EVER VICTOROUS</a>
+                <button onclick="navClose()" style="position: absolute; top: 15px; right: 15px; background-color: red;">X</button>
+            </div>
+            <div id="navSubHolder" style="position: absolute; left: 15px; top: 175px; width: 90%">
+            </div>
+        </div>
+        <!-- Screens -->
+        <div id="School Profile" class="scrn">
+            <div style="width: 100%; position: absolute; left: 0%; top: 80px; text-align: center;">
+                <b style="font-size: 25px; text-align: center;">DRUKGYEL HIGHER SECONDARY SCHOOL</b><br>
+                <b style="font-size: 20px; text-align: center;">VISION: ACADEMIC EXCELLENCE</b><br>
+                <b style="font-size: 20px; text-align: center;">MISSION: EVER VICTOROUS</b><br>
+                <img src="../assets/logo.png" style="width: 75%"><br>
+                <a id="schoolProfileA" style="text-align: center; font-size: 17.5px;"></a>
+                <!-- <a id="principalName" style="text-align: center; font-size: 17.5px;">Principal: Ms. Wangmo</a><br>
+                <a id="VP1Name" style="text-align: center; font-size: 17.5px;">Vice Principal: Mr. Rinchen Laidak</a><br>
+                <a id="VP2Name" style="text-align: center; font-size: 17.5px;">Vice Principal: Mr. Namgay Phuntsho</a><br>
+                <a id="stdDetails" style="text-align: center; font-size: 17.5px;">Total Students: 877 [Boarder: 418 & Day Student: 459] [Boys: 362 & Girls: 515]</a><br>
+                <a id="staffDetails" style="text-align: center; font-size: 17.5px;">Total Staff: 72 [Teachers: 61 & Support Staff: 11]</a><br> -->
+            </div>
+        </div>
+        <div id="About School" class="scrn" hidden>
+            <div id="aboutDiv" style="width: 90%; position: absolute; left: 5%; top: 80px; text-align: left;">
+            </div>
+        </div>
+        <div id="Class Attendance" class="scrn" hidden>
+            <div id="classListHolder" style="width: 100%; position: absolute; left: 0%; top: 80px; text-align: center; overflow: auto; overflow-wrap: break-word; scroll-behavior: smooth;">
+                <b style="font-size: 25px; width: 100%; text-align: center;">Loading...</b>
+            </div>
+        </div>
+        <div id="Announcements" class="scrn" hidden>
+            <div id="announcementDiv" style="position: absolute; width: 90%; left: 5%; top: 85px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
+                <div id="at"></div>
+            </div>
+            <button id="announcementBtn">+</button>
+        </div>
+        <div id="Study Report" class="scrn" hidden>
+        </div>
+        <div id="Staff Photo" class="scrn" hidden>
+        </div>
+        <div id="Contacts" class="scrn" hidden>
+        </div>
+        <div id="About" class="scrn" hidden>
+            <div style="width: 90%; position: absolute; left: 5%; top: 80px; text-align: center;">
+                <img src="../assets/logo.png" style="width: 15%; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24); padding: 10px; border-radius: 15px;"><br>
+                <b style="font-size: 35px; font-weight: bolder;">Drukgyel HSS</b><br><br>
+                <div class="about"><b>Design and Concept</b> <a style="float: right;">@Kelzang Wangdi</a></div><br>
+                <div class="about"><b>Developer</b> <a style="float: right;">@Chencho Namgyel Ghalley</a></div><br>
+                <div class="about"><b>Contacts</b> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=kwangdi.bayllingcs@education.gov.bt" target="_blank" style="float: right;">kwangdi.bayllingcs@education.gov.bt</a></div>
+                <div class="about"><b>&nbsp;</b> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=chenchoghalley@gmail.com" target="_blank" style="float: right;">chenchoghalley@gmail.com</a></div><br>
+            </div>
+        </div>
+    </body>
+    <script src="./functions.js"></script>
+    <script src="./code.js" type="module"></script>
 </html>
