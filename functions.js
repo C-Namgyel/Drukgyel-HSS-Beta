@@ -13,12 +13,18 @@ function animation(elem, name, duration) {
     elem.style.animationTimingFunction = "calc()"
 }
 function setScreen(id) {
-    for (let s = 0; s < document.querySelectorAll(".scrn").length; s++) {
-        if (document.querySelectorAll(".scrn")[s].id == id) {
-            document.querySelectorAll(".scrn")[s].hidden = false;
-        } else {
-            document.querySelectorAll(".scrn")[s].hidden = true;
+    if (document.getElementById(id) != null) {
+        for (let s = 0; s < document.querySelectorAll(".scrn").length; s++) {
+            if (document.querySelectorAll(".scrn")[s].id == id) {
+                document.querySelectorAll(".scrn")[s].hidden = false;
+            } else {
+                document.querySelectorAll(".scrn")[s].hidden = true;
+            }
         }
+        return true
+    } else {
+        console.error("The screen doesn't exist")
+        return false
     }
 }
 function getBase64Image(img) {

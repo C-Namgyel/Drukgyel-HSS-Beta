@@ -88,82 +88,6 @@ function createPrompt() {
     };
     return([holder, close])
 }
-function titleText(holder, text) {
-    let b = document.createElement("b");
-    b.innerHTML = text;
-    b.style = "text-align: center; display: block; font-size: 7vw";
-    holder.appendChild(b);
-    holder.appendChild(document.createElement("br"));
-}
-function textInput(holder, placeholder) {
-    let inp = document.createElement("input");
-    inp.placeholder = placeholder;
-    inp.style = "width: 90%";
-    holder.appendChild(inp);
-    holder.appendChild(document.createElement("br"));
-    holder.appendChild(document.createElement("br"));
-    return(inp)
-}
-function dropdown(holder, placeholder, options) {
-    let sel = document.createElement("select");
-    sel.innerHTML = `<option value="" selected disabled hidden>${placeholder}</option>`;
-    for (let o of options) {
-        let elem = document.createElement("option");
-        elem.innerHTML = o;
-        elem.style = "color: black;"
-        sel.appendChild(elem);
-    }
-    sel.style = "width: 90%; color: gray;";
-    holder.appendChild(sel);
-    holder.appendChild(document.createElement("br"));
-    holder.appendChild(document.createElement("br"));
-    sel.oninput = function() {
-        sel.style.color = "black";
-    }
-    return(sel)
-}
-function textArea(holder, placeholder) {
-    let tarea = document.createElement("textarea");
-    tarea.placeholder = placeholder;
-    tarea.style = "width: 90%; resize: none;";
-    holder.appendChild(tarea);
-    holder.appendChild(document.createElement("br"));
-    holder.appendChild(document.createElement("br"));
-    let ch = tarea.clientHeight;
-    console.log(ch)
-    tarea.oninput = function() {
-        if (this.scrollHeight > ch) {
-            this.style.height = ch;
-            this.style.height = this.scrollHeight + 5;
-        }
-    }
-    return(tarea)
-}
-function button(holder, text, code) {
-    let btn = document.createElement("button");
-    btn.innerHTML = text;
-    holder.appendChild(btn);
-    btn.onclick = function(event) {
-        code(event)
-    };
-    return(btn)
-}
-function boldText(holder, text) {
-    let b = document.createElement("b");
-    b.style = "width: 90%; text-align: left; display: inline-block;";
-    b.innerHTML = text;
-    holder.appendChild(b);
-    holder.appendChild(document.createElement("br"));
-}
-function dateInput(holder) {
-    let date = document.createElement("input")
-    date.type = "date"
-    date.style = "width: 90%"
-    holder.appendChild(date);
-    holder.appendChild(document.createElement("br"));
-    holder.appendChild(document.createElement("br"));
-    return(date)
-}
 
 // Setup startup screen
 function startup() {
@@ -439,30 +363,45 @@ document.getElementById("announcementBtn").onclick = function () {
     let annElem = createPrompt();
     let holder = annElem[0];
     let closeBtn = annElem[1];
-    titleText(holder, "Announcement")
-    let annName = textInput(holder, "Name")
-    let annTo = dropdown(holder, "Announcement for", ["Captains", "Everyone", "Students", "Teachers", "Others"])
-    annTo.onchange = function() {
-        if (annTo.value == "Others") {
-            let to = "";
-            while (to.trim() == "") {
-                to = prompt("This announcement is for: ")
-                if (to == null) {
-                    annTo.firstChild.selected = true;
-                    break;
-                } else if (to.trim() != "") {
-                    let elem = document.createElement("option");
-                    elem.innerHTML = to;
-                    elem.style = "color: black;"
-                    elem.selected = true;
-                    annTo.insertBefore(elem, annTo.lastChild);
-                }
-            }
-        }
+    let titleTxt = document.createElement("b");
+    titleTxt.innerHTML = "Make an<br>Announcement";
+    titleTxt.style = "text-align: center; display: block; font-size: 7vw";
+    holder.appendChild(titleTxt);
+    holder.appendChild(document.createElement("br"));
+    let annName = document.createElement("input");
+    annName.placeholder = "Name";
+    annName.style = "width: 90%";
+    holder.appendChild(annName);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let annTo = document.createElement("select");
+    annTo.innerHTML = `<option value="" selected disabled hidden>Announcement for</option>`;
+    let opts = ["Captains", "Everyone", "Students", "Teachers", "Others"]
+    for (let o of opts) {
+        let elem = document.createElement("option");
+        elem.innerHTML = o;
+        annTo.appendChild(elem);
     }
-    let annHeading = textInput(holder, "Heading")
-    let annMessage = textArea(holder, "Announcement")
-    let uploadBtn = button(holder, "Upload", function() {
+    annTo.style = "width: 90%";
+    holder.appendChild(annTo);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let annHeading = document.createElement("input");
+    annHeading.placeholder = "Heading";
+    annHeading.style = "width: 90%";
+    holder.appendChild(annHeading);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let annMessage = document.createElement("textarea");
+    annMessage.placeholder = "Announcement";
+    annMessage.style = "width: 90%; height: 150px; resize: none;";
+    holder.appendChild(annMessage);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let uploadBtn = document.createElement("button");
+    uploadBtn.innerHTML = "Upload";
+    holder.appendChild(uploadBtn);
+    uploadBtn.onclick = function() {
         let data = {
             name: annName.value.trim(),
             to: annTo.value.trim(),
@@ -481,7 +420,7 @@ document.getElementById("announcementBtn").onclick = function () {
         } else {
             alert("Please fill up all the information");
         };
-    })
+    };
 };
 
 // Casual Leave
@@ -490,16 +429,73 @@ document.getElementById("casualLeaveBtn").onclick = function () {
     let csElem = createPrompt();
     let holder = csElem[0];
     let closeBtn = csElem[1];
-    titleText(holder, "Casual Leave");
-    let clName = textInput(holder, "Name");
-    let clType = dropdown(holder, "Leave Type", ["Casual Leave", "Medical Leave", "Maternity Leave", "Paternity Leave", "Earned Leave", "Extra Ordinary Leave", "Medical Escort Leave", "Bereavement Leave"]);
-    let clDuration = dropdown(holder, "Duration", ["Half Day", "One Day", "Two Days", "Three Days", "Four Days", "Five Days", "Six Days", "Seven Days", "Eight Days", "Nine Days", "Ten Days"]);
-    boldText(holder, "Start Date")
-    let clStart = dateInput(holder)
-    boldText(holder, "End Date")
-    let clEnd = dateInput(holder)
-    let clReason = textInput(holder, "Reason")
-    let uploadBtn = button(holder, "Upload", function() {
+    let titleTxt = document.createElement("b");
+    titleTxt.innerHTML = "Casual Leave";
+    titleTxt.style = "text-align: center; display: block; font-size: 7vw";
+    holder.appendChild(titleTxt);
+    holder.appendChild(document.createElement("br"));
+    let clName = document.createElement("input");
+    clName.placeholder = "Name";
+    clName.style = "width: 90%";
+    holder.appendChild(clName);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let clType = document.createElement("select");
+    clType.innerHTML = `<option value="" selected disabled hidden>Leave Type</option>`;
+    let opts = ["Casual Leave", "Medical Leave", "Maternity Leave", "Paternity Leave", "Earned Leave", "Extra Ordinary Leave", "Medical Escort Leave", "Bereavement Leave"]
+    for (let o of opts) {
+        let elem = document.createElement("option");
+        elem.innerHTML = o;
+        clType.appendChild(elem)
+    }
+    clType.style = "width: 90%";
+    holder.appendChild(clType);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let clDuration = document.createElement("select");
+    clDuration.innerHTML = `<option value="" selected disabled hidden>Duration</option>`;
+    let opts2 = ["Half Day", "One Day", "Two Days", "Three Days", "Four Days", "Five Days", "Six Days", "Seven Days", "Eight Days", "Nine Days", "Ten Days"]
+    for (let o of opts2) {
+        let elem = document.createElement("option");
+        elem.innerHTML = o;
+        clDuration.appendChild(elem)
+    }
+    clDuration.style = "width: 90%";
+    holder.appendChild(clDuration);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let b1 = document.createElement("b");
+    b1.style = "width: 90%; text-align: left; display: inline-block;";
+    b1.innerHTML = "Start Date"
+    holder.appendChild(b1)
+    holder.appendChild(document.createElement("br"));
+    let clStart = document.createElement("input")
+    clStart.type = "date"
+    clStart.style = "width: 90%"
+    holder.appendChild(clStart);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let b2 = document.createElement("b");
+    b2.style = "width: 90%; text-align: left; display: inline-block;";
+    b2.innerHTML = "End Date"
+    holder.appendChild(b2)
+    holder.appendChild(document.createElement("br"));
+    let clEnd = document.createElement("input");
+    clEnd.type = "date";
+    clEnd.style = "width: 90%";
+    holder.appendChild(clEnd);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let clReason = document.createElement("input");
+    clReason.placeholder = "Reason";
+    clReason.style = "width: 90%";
+    holder.appendChild(clReason);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let uploadBtn = document.createElement("button");
+    uploadBtn.innerHTML = "Upload";
+    holder.appendChild(uploadBtn);
+    uploadBtn.onclick = function() {
         let data = {
             name: clName.value.trim(),
             type: clType.value,
@@ -520,7 +516,7 @@ document.getElementById("casualLeaveBtn").onclick = function () {
         } else {
             alert("Please fill up all the information");
         };
-    })
+    };
 };
 
 // In Campus Leave
@@ -529,9 +525,22 @@ document.getElementById("campusLeaveBtn").onclick = function () {
     let csElem = createPrompt();
     let holder = csElem[0];
     let closeBtn = csElem[1];
-    titleText(holder, "In Campus Leave")
-    let clName = textInput(holder, "Name")
-    boldText(holder, "Date and Time")
+    let titleTxt = document.createElement("b");
+    titleTxt.innerHTML = "In Campus Leave";
+    titleTxt.style = "text-align: center; display: block; font-size: 7vw";
+    holder.appendChild(titleTxt);
+    holder.appendChild(document.createElement("br"));
+    let clName = document.createElement("input");
+    clName.placeholder = "Name";
+    clName.style = "width: 90%";
+    holder.appendChild(clName);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let b1 = document.createElement("b");
+    b1.style = "width: 90%; text-align: left; display: inline-block;";
+    b1.innerHTML = "Date and Time"
+    holder.appendChild(b1)
+    holder.appendChild(document.createElement("br"));
     let clDate = document.createElement("input")
     clDate.type = "date"
     clDate.style = "width: 45%"
@@ -542,9 +551,22 @@ document.getElementById("campusLeaveBtn").onclick = function () {
     holder.appendChild(clTime);
     holder.appendChild(document.createElement("br"));
     holder.appendChild(document.createElement("br"));
-    let clPurpose = textInput(holder, "Purpose")
-    let clPeriod = textInput(holder, "Period [From - To]")
-    let uploadBtn = button(holder, "Upload", function() {
+    let clPurpose = document.createElement("input");
+    clPurpose.style = "width: 90%";
+    clPurpose.placeholder = "Purpose"
+    holder.appendChild(clPurpose);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let clPeriod = document.createElement("input");
+    clPeriod.placeholder = "Period [From - To]";
+    clPeriod.style = "width: 90%";
+    holder.appendChild(clPeriod);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let uploadBtn = document.createElement("button");
+    uploadBtn.innerHTML = "Upload";
+    holder.appendChild(uploadBtn);
+    uploadBtn.onclick = function() {
         let data = {
             name: clName.value.trim(),
             date: clDate.value,
@@ -564,7 +586,7 @@ document.getElementById("campusLeaveBtn").onclick = function () {
         } else {
             alert("Please fill up all the information");
         };
-    });
+    };
 };
 
 // Study Report
@@ -573,13 +595,50 @@ document.getElementById("studyReportBtn").onclick = function () {
     let csElem = createPrompt();
     let holder = csElem[0];
     let closeBtn = csElem[1];
-    titleText(holder, "Study Report");
-    let srTeacher = textInput(holder, "Teacher (ToD)");
-    boldText(holder, "Date");
-    let srDate = dateInput(holder);
-    let srStudy = dropdown(holder, "Study", ["Morning Study", "Evening Study", "Night Study"]);
-    let srAbsentees = textArea(holder, "Absentees [Name,Class,Sec,Bdr/DS,Reason]")
-    let uploadBtn = button(holder, "Upload", function() {
+    let titleTxt = document.createElement("b");
+    titleTxt.innerHTML = "Study Report";
+    titleTxt.style = "text-align: center; display: block; font-size: 7vw";
+    holder.appendChild(titleTxt);
+    holder.appendChild(document.createElement("br"));
+    let srTeacher = document.createElement("input");
+    srTeacher.placeholder = "Teacher (ToD)";
+    srTeacher.style = "width: 90%";
+    holder.appendChild(srTeacher);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let b1 = document.createElement("b");
+    b1.style = "width: 90%; text-align: left; display: inline-block;";
+    b1.innerHTML = "Date"
+    holder.appendChild(b1)
+    holder.appendChild(document.createElement("br"));
+    let srDate = document.createElement("input");
+    srDate.type = "date";
+    srDate.style = "width: 90%;";
+    holder.appendChild(srDate);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let srStudy = document.createElement("select");
+    srStudy.innerHTML = `<option value="" selected disabled hidden>Study</option>`;
+    let opts = ["Morning Study", "Evening Study", "Night Study"]
+    for (let o of opts) {
+        let elem = document.createElement("option");
+        elem.innerHTML = o;
+        srStudy.appendChild(elem);
+    }
+    srStudy.style = "width: 90%";
+    holder.appendChild(srStudy);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let srAbsentees = document.createElement("textarea");
+    srAbsentees.style = "width: 90%";
+    srAbsentees.placeholder = "Absentees [Name,Class,Sec,Bdr/DS,Reason]"
+    holder.appendChild(srAbsentees);
+    holder.appendChild(document.createElement("br"));
+    holder.appendChild(document.createElement("br"));
+    let uploadBtn = document.createElement("button");
+    uploadBtn.innerHTML = "Upload";
+    holder.appendChild(uploadBtn);
+    uploadBtn.onclick = function() {
         let data = {
             teacher: srTeacher.value.trim(),
             date: srDate.value,
@@ -598,7 +657,7 @@ document.getElementById("studyReportBtn").onclick = function () {
         } else {
             alert("Please fill up all the information");
         };
-    });
+    };
 };
 
 // Contacts

@@ -9,10 +9,11 @@
         <!-- Splash Screen -->
         <div id="splashDiv" style="position: fixed; left: 0%; top: 0%; width: 100%; height: 100%; background-color: #0989EC; z-index: 5">
             <div id="splashLogo" style="width: 50%; height: 50%; position: absolute; left: 25%; top: 25%; scale: 0; background-image: url('assets/logo.png'); background-position: center; background-repeat: no-repeat; background-size: contain; animation-name: splash; animation-duration: 0.75s; animation-fill-mode: forwards; animation-timing-function: cubic-bezier(0, 0.75, 1);"></div>
+            <b id="splashLoad" style="width: 100%; position: absolute; top: 75%; text-align: center; font-size: 7vw;"></b>
         </div>
 
         <!-- Heading -->
-        <div style="width: 100%; height: 75px; position: fixed; top: 0%; left: 0%; background-image: linear-gradient(#0989EC, #0989EC, #0989EC, #0989EC, white); text-align: center; font-size: 30; color: white; line-height: 62.5px; z-index: 1;">
+        <div style="width: 100%; height: 75px; position: fixed; top: 0%; left: 0%; background-image: linear-gradient(#0989EC, #0989EC, #0989EC, #0989EC, white); text-align: center; font-size: 30px; color: white; line-height: 62.5px; z-index: 1;">
             <b id="header">School Profile</b>
             <div id="navBtn" onclick="navOpen()" style="position: fixed; height: 20px; width: auto; left: 15px; top: 20px;">
                 <img src="./assets/menu.svg" style="height: 100%;">
@@ -20,7 +21,7 @@
         </div>
         <!-- Nav -->
         <div id="navBarrier" onclick="navClose()" style="width: 100%; height: 100%; position: fixed; left: 0%; top: 0%; background-color: rgba(0, 0, 0, 0.5); opacity: 50%; z-index: 1;" hidden></div>
-        <div id="navDiv" style="width: 75%; height: 100%; position: fixed; left: -75%; top: 0%; background-color: white; z-index: 1;">
+        <div id="navDiv" style="width: 75%; height: 100%; position: fixed; left: -75%; top: 0%; background-color: white; z-index: 1; overflow: auto;">
             <div style="width: 100%; height: 150px; position: absolute; left: 0%; top: 0%; background-color: #0989EC;">
                 <div id="profilePic" style="position: absolute; height: 50px; width: 50px; overflow: hidden; left: 15px; top: 25px; border-radius: 100%; text-align: center; background-image: url('./assets/logo.png'); background-position: center; background-repeat: no-repeat; background-size: cover;"></div>
                 <b id="profileName" style="position: absolute; width: 100%; top: 85px; left: 15px; font-size: 20px; color: white;">Drukgyel HSS</b>
@@ -56,15 +57,41 @@
         </div>
         <div id="Announcements" class="scrn" hidden>
             <div id="announcementDiv" style="position: absolute; width: 90%; left: 5%; top: 85px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
-                <div id="at"></div>
+                <div class="at"></div>
             </div>
-            <button id="announcementBtn">+</button>
+            <button class="addButton" id="announcementBtn">+</button>
+        </div>
+        <div id="Casual Leave" class="scrn" hidden>
+            <div id="casualLeaveDiv" style="position: absolute; width: 90%; left: 5%; top: 85px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
+                <div class="at"></div>
+            </div>
+            <button class="addButton" id="casualLeaveBtn">+</button>
+        </div>
+        <div id="In Campus Leave" class="scrn" hidden>
+            <div id="campusLeaveDiv" style="position: absolute; width: 90%; left: 5%; top: 85px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
+                <div class="at"></div>
+            </div>
+            <button class="addButton" id="campusLeaveBtn">+</button>
         </div>
         <div id="Study Report" class="scrn" hidden>
+            <div id="studyReportDiv" style="position: absolute; width: 90%; left: 5%; top: 85px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
+                <div class="at"></div>
+            </div>
+            <button class="addButton" id="studyReportBtn">+</button>
         </div>
         <div id="Staff Photo" class="scrn" hidden>
         </div>
+        <div id="Staff Attendance" class="scrn" hidden>
+            <div style="position: absolute; width: 90%; left: 5%; top: 85; text-align: center;">
+                <b>This link pertains to the documentation of staff attendance during school-related occasions.</b><br><br>
+                <button onclick="window.open('https://tinyurl.com/mry29b6w', '_blank')">Click Here to Take Attendance</button><br><br>
+                <p style="text-align: left;">Note:<br>
+                Only School administrations can record the attendance.</p>
+            </div>
+        </div>
         <div id="Contacts" class="scrn" hidden>
+            <div id="contactsDiv" style="position: absolute; width: 90%; left: 5%; top: 85px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
+            </div>
         </div>
         <div id="About" class="scrn" hidden>
             <div style="width: 90%; position: absolute; left: 5%; top: 80px; text-align: center;">

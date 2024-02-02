@@ -36,10 +36,11 @@
     border-color: grey;
     width: 100%;
     text-align: left;
+    font-size: 4vw;
 }
 
 /* Elements */
-#announcementBtn {
+.addButton {
     background-color: #4CAF50;
     color: white;
     font-size: 10vw;
