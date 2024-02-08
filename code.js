@@ -1,8 +1,8 @@
 // TODO
 /*
-Create functions for creating new elements such as input and all.
-Add the staff photo feature.
+Add delete feature for... You know for what...
 Make the GUI a little better with stylings.
+Add the staff photo feature.
 */
 
 
@@ -10,6 +10,7 @@ Make the GUI a little better with stylings.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-analytics.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBUSb8D9xWqda-FGEVfTeEokSMTawyCrFI",
@@ -26,6 +27,34 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const database = getDatabase();
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+
+//Test
+document.getElementById("login").onclick = function() {
+    signInWithPopup(auth, provider)
+    .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        // The signed-in user info.
+        const user = result.user;
+        console.log('Google sign-in successful:', user);
+        // IdP data available using getAdditionalUserInfo(result)
+        // ...
+    }).catch((error) => {
+        // Handle errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.error('Google sign-in failed:', errorCode, errorMessage);
+    });
+}
+
 
 // Firebase Functions
 function getAllDatas(code) {
@@ -130,7 +159,6 @@ function textArea(holder, placeholder) {
     holder.appendChild(document.createElement("br"));
     holder.appendChild(document.createElement("br"));
     let ch = tarea.clientHeight;
-    console.log(ch)
     tarea.oninput = function() {
         if (this.scrollHeight > ch) {
             this.style.height = ch;
@@ -260,6 +288,7 @@ var navList = [
     { label: "Staff Attendance", logo: "./assets/attendance.svg" },
     { label: "Contacts", logo: "./assets/contacts.svg" },
     { label: "About", logo: "./assets/about.svg" },
+    { label: "Auth", logo: "./assets/home.svg" },
 ];
 for (let d = 0; d < navList.length; d++) {
     let a = document.createElement("a");
@@ -280,8 +309,6 @@ for (let d = 0; d < navList.length; d++) {
     a.onclick = function () {
         let val = a.value.replace(" Btn", "")
         if (setScreen(val) == true) {
-            console.log(val)
-            console.log(studyReport)
             // Load Datas and display in screen
             if (val == "Announcements" && announcements != undefined) {
                 listLoad(announcements, "announcementDiv", function(div, x) {
@@ -306,7 +333,7 @@ for (let d = 0; d < navList.length; d++) {
                 }, function(y, x) {
                     y.innerHTML = `<b style='font-size: 25px;'>Details</b><br><br>
                     Name: ${casualLeaves[x].name}<hr>
-                    Type of Leave: ${casualLeaves.type}<hr>
+                    Type of Leave: ${casualLeaves[x].type}<hr>
                     Duration: ${casualLeaves[x].duration}<hr>
                     Start Date:  ${casualLeaves[x].startDate}<hr>
                     End Date: ${casualLeaves[x].endDate}<hr>
@@ -606,27 +633,27 @@ var contacts = [
     {
         "title": "Social Coordinator",
         "name": "Lop. Yeshey Loday",
-        "contact": "1"
+        "contact": 17627882
     },
     {
         "title": "Spiritual Coordinator",
         "name": "Lop. Gem Gyelsthen",
-        "contact": "2"
+        "contact": 17625858
     },
     {
         "title": "Vice Principal (Physical Coordinator)",
         "name": "Lop. Namgay Phuntsho",
-        "contact": "3"
+        "contact": 17640554
     },
     {
         "title": "Emotional Coordinator",
         "name": "Lop. Tshering Yangden",
-        "contact": "4"
+        "contact": 17577292
     },
     {
         "title": "Exam Coordinator",
         "name": "Lop. Rinchen Khandu",
-        "contact": "5"
+        "contact": 17659251
     }
 ];
 
@@ -634,7 +661,7 @@ for (let x of contacts) {
     let div = document.createElement("div");
     div.style = "font-size: 4vw;"
     div.innerHTML = `<b>${x.title}</b><br><a>${x.name}</a>
-    <button style='float: right;' onclick='alert("Contacting ${x.contact}")'>Contact</button>`;
+    <button style='float: right;' onclick='window.location.href = "tel: ${x.contact}";'>Contact</button>`;
     document.getElementById("contactsDiv").appendChild(div);
     document.getElementById("contactsDiv").appendChild(document.createElement("br"));
 };
