@@ -10,7 +10,7 @@ Add the staff photo feature.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-analytics.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js";
+// import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBUSb8D9xWqda-FGEVfTeEokSMTawyCrFI",
@@ -27,8 +27,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const database = getDatabase();
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
+// const auth = getAuth(app);
+// const provider = new GoogleAuthProvider();
 
 
 //Test
@@ -41,8 +41,14 @@ document.getElementById("login").onclick = function() {
         // The signed-in user info.
         const user = result.user;
         console.log('Google sign-in successful:', user);
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+        let data = {
+            username: user.displayName,
+            email: user.email,
+            pic: user.photoURL
+        }
+        writeData("users", data, function() {
+            localStorage.auth = JSON.stringify(data)
+        })
     }).catch((error) => {
         // Handle errors here.
         const errorCode = error.code;
@@ -195,16 +201,21 @@ function dateInput(holder) {
 
 // Setup startup screen
 function startup() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var initialValue = urlParams.get('page');
-    var par = initialValue || undefined; // Use a default value if the parameter is not presents
-    var availScreens = navList.map(item => item.label);
-    if (par != undefined && availScreens.includes(par)) {
-        document.getElementById(par + " Btn").click();
-    } else {
-        if (window.location.search.lastIndexOf('?') == -1) {
-            window.history.pushState({}, null, window.location.search + "?page=School Profile");
+    if (localStorage.auth != undefined && localStorage.auth != "") {
+        var urlParams = new URLSearchParams(window.location.search);
+        var initialValue = urlParams.get('page');
+        var par = initialValue || undefined; // Use a default value if the parameter is not presents
+        var availScreens = navList.map(item => item.label);
+        if (par != undefined && availScreens.includes(par)) {
+            document.getElementById(par + " Btn").click();
+        } else {
+            if (window.location.search.lastIndexOf('?') == -1) {
+                window.history.pushState({}, null, window.location.search + "?page=School Profile");
+            };
         };
+    } else {
+        setScreen("Auth");
+        document.getElementById("header").innerHTML = "Auth";
     };
 }
 
@@ -287,8 +298,7 @@ var navList = [
     { label: "Staff Photo", logo: "./assets/book.svg" },
     { label: "Staff Attendance", logo: "./assets/attendance.svg" },
     { label: "Contacts", logo: "./assets/contacts.svg" },
-    { label: "About", logo: "./assets/about.svg" },
-    { label: "Auth", logo: "./assets/home.svg" },
+    { label: "About", logo: "./assets/about.svg" }
 ];
 for (let d = 0; d < navList.length; d++) {
     let a = document.createElement("a");
