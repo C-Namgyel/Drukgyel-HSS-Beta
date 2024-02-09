@@ -201,7 +201,7 @@ function dateInput(holder) {
 
 // Setup startup screen
 function startup() {
-    if (localStorage.auth != undefined && localStorage.auth != "") {
+    //if (localStorage.auth != undefined && localStorage.auth != "") {
         var urlParams = new URLSearchParams(window.location.search);
         var initialValue = urlParams.get('page');
         var par = initialValue || undefined; // Use a default value if the parameter is not presents
@@ -213,10 +213,10 @@ function startup() {
                 window.history.pushState({}, null, window.location.search + "?page=School Profile");
             };
         };
-    } else {
+    /*} else {
         setScreen("Auth");
         document.getElementById("header").innerHTML = "Auth";
-    };
+    };*/
 }
 
 // Global Variables
