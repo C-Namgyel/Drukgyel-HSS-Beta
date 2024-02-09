@@ -10,7 +10,7 @@ Add the staff photo feature.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-analytics.js";
 import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
-// import { getAuth, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBUSb8D9xWqda-FGEVfTeEokSMTawyCrFI",
@@ -27,18 +27,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const database = getDatabase();
-// const auth = getAuth(app);
-// const provider = new GoogleAuthProvider();
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 
 //Test
 document.getElementById("login").onclick = function() {
     signInWithPopup(auth, provider)
     .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
-        // The signed-in user info.
         const user = result.user;
         console.log('Google sign-in successful:', user);
         let data = {
@@ -48,6 +46,10 @@ document.getElementById("login").onclick = function() {
         }
         writeData("users", data, function() {
             localStorage.auth = JSON.stringify(data)
+            document.getElementById("School Profile Btn").click()
+            document.getElementById("profilePic").style.backgroundImage = `url(${data.pic})`;
+            document.getElementById("profileName").innerHTML = data.username;
+            document.getElementById("profleEmail").innerHTML = data.email;
         })
     }).catch((error) => {
         // Handle errors here.
@@ -60,7 +62,6 @@ document.getElementById("login").onclick = function() {
         console.error('Google sign-in failed:', errorCode, errorMessage);
     });
 }
-
 
 // Firebase Functions
 function getAllDatas(code) {
@@ -201,11 +202,11 @@ function dateInput(holder) {
 
 // Setup startup screen
 function startup() {
-    //if (localStorage.auth != undefined && localStorage.auth != "") {
-        var urlParams = new URLSearchParams(window.location.search);
-        var initialValue = urlParams.get('page');
-        var par = initialValue || undefined; // Use a default value if the parameter is not presents
-        var availScreens = navList.map(item => item.label);
+    if (localStorage.auth != undefined && localStorage.auth != "") {
+        let urlParams = new URLSearchParams(window.location.search);
+        let initialValue = urlParams.get('page');
+        let par = initialValue || undefined; // Use a default value if the parameter is not presents
+        let availScreens = navList.map(item => item.label);
         if (par != undefined && availScreens.includes(par)) {
             document.getElementById(par + " Btn").click();
         } else {
@@ -213,10 +214,14 @@ function startup() {
                 window.history.pushState({}, null, window.location.search + "?page=School Profile");
             };
         };
-    /*} else {
-        setScreen("Auth");
-        document.getElementById("header").innerHTML = "Auth";
-    };*/
+        let profData = JSON.parse(localStorage.auth);
+        document.getElementById("profilePic").style.backgroundImage = `url(${profData.pic})`;
+        document.getElementById("profileName").innerHTML = profData.username;
+        document.getElementById("profleEmail").innerHTML = profData.email;
+    } else {
+        setScreen("Sign In");
+        document.getElementById("header").innerHTML = "Sign In";
+    };
 }
 
 // Global Variables
