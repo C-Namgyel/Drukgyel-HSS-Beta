@@ -1,7 +1,7 @@
 // TODO
 /*
-Line 691: Work on staff profile feature.
-Add delete feature for... You know for what...
+Delete feature should be turned off after an hour of posting.
+Add filter feature
 Make the GUI a little better with stylings.
 */
 
@@ -477,9 +477,7 @@ for (let d = 0; d < navList.length; d++) {
             } else if (val == "Staff Profile" && dataStorage.users != undefined) {
                 document.getElementById("staffProfileDiv").innerHTML = "";
                 document.getElementById("staffProfileDiv").appendChild(at)
-                let data = dataStorage.users
-                sortObject(data, "name", true)
-                  
+                let data = dataStorage.users;
                 if (Object.keys(data).length == 0) {
                     let b = document.createElement("b")
                     b.innerHTML = "No Data";
