@@ -175,7 +175,7 @@ function startup() {
         document.getElementById(par + " Btn").click();
     } else {
         if (window.location.search.lastIndexOf('?') == -1) {
-            window.history.pushState({}, null, window.location.search + "?page=School Profile");
+            document.getElementById("School Profile Btn").click();
         };
     };
     if (localStorage.userId == undefined) {
