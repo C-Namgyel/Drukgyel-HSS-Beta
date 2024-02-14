@@ -57,9 +57,8 @@
             </div>
         </div>
         <div id="Announcements" class="scrn" hidden>
-            <div hidden style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
-                <button id="announcementFilter" style="font-size: 4vw;">Filter</button>&nbsp;&nbsp;
-                <button id="announcementDelete" style="font-size: 4vw;">Delete</button>
+            <div style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
+                <b style="font-size: 4vw;">Filter by Date:</b>&nbsp;<input class="filterDate" id="announcementFilter" type="date" style="font-size: 4vw;">
             </div>
             <div id="announcementDiv" style="position: absolute; width: 90%; left: 5%; top: 125px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
                 <div class="at"></div>
@@ -67,9 +66,8 @@
             <button class="addButton" id="announcementBtn">+</button>
         </div>
         <div id="Casual Leave" class="scrn" hidden>
-            <div hidden style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
-                <button id="casualLeaveFilter" style="font-size: 4vw;">Filter</button>&nbsp;&nbsp;
-                <button id="casualLeaveDelete" style="font-size: 4vw;">Delete</button>
+            <div style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
+                <b style="font-size: 4vw;">Filter by Date:</b>&nbsp;<input class="filterDate" id="casualLeaveFilter" type="date" style="font-size: 4vw;">
             </div>
             <div id="casualLeaveDiv" style="position: absolute; width: 90%; left: 5%; top: 125px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
                 <div class="at"></div>
@@ -77,9 +75,8 @@
             <button class="addButton" id="casualLeaveBtn">+</button>
         </div>
         <div id="In Campus Leave" class="scrn" hidden>
-            <div hidden style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
-                <button id="campusLeaveFilter" style="font-size: 4vw;">Filter</button>&nbsp;&nbsp;
-                <button id="campusLeaveDelete" style="font-size: 4vw;">Delete</button>
+            <div style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
+                <b style="font-size: 4vw;">Filter by Date:</b>&nbsp;<input class="filterDate" id="campusLeaveFilter" type="date" style="font-size: 4vw;">
             </div>
             <div id="campusLeaveDiv" style="position: absolute; width: 90%; left: 5%; top: 125px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
                 <div class="at"></div>
@@ -87,9 +84,8 @@
             <button class="addButton" id="campusLeaveBtn">+</button>
         </div>
         <div id="Study Report" class="scrn" hidden>
-            <div hidden style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
-                <button id="studyReportFilter" style="font-size: 4vw;">Filter</button>&nbsp;&nbsp;
-                <button id="studyReportDelete" style="font-size: 4vw;">Delete</button>
+            <div style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
+                <b style="font-size: 4vw;">Filter by Date:</b>&nbsp;<input class="filterDate" id="studyReportFilter" type="date" style="font-size: 4vw;">
             </div>
             <div id="studyReportDiv" style="position: absolute; width: 90%; left: 5%; top: 125px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
                 <div class="at"></div>
@@ -125,6 +121,13 @@
             </div>
         </div>
     </body>
+    <script>
+setTimeout(function() {
+    if (document.getElementById("splashDiv") != null && document.getElementById("splashLoad").innerHTML == "") {
+        document.getElementById("splashLoad").innerHTML = "Failed to load<br>Refresh the page"
+    }
+}, 5000)
+    </script>
     <script src="./functions.js"></script>
     <script src="./code.js" type="module"></script>
 </html>

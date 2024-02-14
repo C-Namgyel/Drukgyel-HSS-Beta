@@ -139,3 +139,7 @@ function timeToWords(time) {
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     return(`${months[parseInt(tempTime[1]) - 1]} ${tempTime[2]}, ${tempTime[0]}`)
 }
+function getTodayDate() {
+    let time = new Date();
+    return(`${time.getFullYear()}-${(time.getMonth() + 1).toString().padStart(2, "0")}-${time.getDate().toString().padStart(2, "0")}`);
+}
