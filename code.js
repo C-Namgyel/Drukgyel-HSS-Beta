@@ -1,7 +1,6 @@
 // TODO
 /*
 Delete feature should be turned off after an hour of posting.
-Fix the staff profile issue
 Make the GUI a little better with stylings.
 */
 
@@ -57,6 +56,13 @@ function writeData(path, data, code) {
         code();
     });
 };
+
+function deleteData(path, code) {
+    remove(ref(database, path)).then(() => {
+        code()
+    })
+}
+
 // Handle Online and Offline Changes
 window.onoffline = function() {
     let p = createPrompt();
@@ -321,16 +327,13 @@ for (let d = 0; d < navList.length; d++) {
                                 if (conf == true) {
                                     delBtn.disabled = true;
                                     delBtn.innerHTML = "Deleting"
-                                    remove(ref(database, `announcements/${y}/${x}`)).then(() => {
+                                    deleteData(`announcements/${y}/${x}`, function() {
                                         delete dataStorage["announcements"][y][x];
                                         if (Object.keys(dataStorage["announcements"][y]).length == 0) {
                                             delete dataStorage["announcements"][y];
                                         };
                                         document.getElementById("Announcements Btn").click()
                                     })
-                                    .catch((error) => {
-                                        console.error("Error deleting data: ", error);
-                                    });
                                 };
                             }
                         }
@@ -378,16 +381,13 @@ for (let d = 0; d < navList.length; d++) {
                                 if (conf == true) {
                                     delBtn.disabled = true;
                                     delBtn.innerHTML = "Canceling"
-                                    remove(ref(database, `casualLeaves/${y}/${x}`)).then(() => {
+                                    deleteData(`casualLeaves/${y}/${x}`, function() {
                                         delete dataStorage["casualLeaves"][y][x];
                                         if (Object.keys(dataStorage["casualLeaves"][y]).length == 0) {
                                             delete dataStorage["casualLeaves"][y];
                                         };
                                         document.getElementById("Casual Leave Btn").click()
                                     })
-                                    .catch((error) => {
-                                        console.error("Error deleting data: ", error);
-                                    });
                                 };
                             }
                         }
@@ -441,7 +441,7 @@ for (let d = 0; d < navList.length; d++) {
                                 if (conf == true) {
                                     delBtn.disabled = true;
                                     delBtn.innerHTML = "Canceling"
-                                    remove(ref(database, `inCampusLeaves/${y}/${x}`)).then(() => {
+                                    deleteData(`inCampusLeaves/${y}/${x}`, function() {
                                         delete dataStorage["inCampusLeaves"][y][x];
                                         if (Object.keys(dataStorage["inCampusLeaves"][y]).length == 0) {
                                             delete dataStorage["inCampusLeaves"][y];
@@ -502,16 +502,13 @@ for (let d = 0; d < navList.length; d++) {
                                 if (conf == true) {
                                     delBtn.disabled = true;
                                     delBtn.innerHTML = "Deleting"
-                                    remove(ref(database, `studyReports/${y}/${x}`)).then(() => {
+                                    deleteData(`studyReports/${y}/${x}`, function() {
                                         delete dataStorage["studyReports"][y][x];
                                         if (Object.keys(dataStorage["studyReports"][y]).length == 0) {
                                             delete dataStorage["studyReports"][y];
                                         };
                                         document.getElementById("Study Report Btn").click()
                                     })
-                                    .catch((error) => {
-                                        console.error("Error deleting data: ", error);
-                                    });
                                 };
                             }
                         }
@@ -572,7 +569,7 @@ for (let d = 0; d < navList.length; d++) {
                                 let elem = createPrompt()
                                 elem[0].style.backgroundColor = "white";
                                 elem[0].style.textAlign = "left";
-                                let con = `<div style="position: relative; left: 50%; transform: translateX(-50%); width: 30%; aspect-ratio: 1/1; overflow: hidden; background-image: url('${users[s].profilePicture}'); background-position: center; background-repeat: no-repeat; background-size: cover;"></div><br>
+                                let con = `<div onclick="window.open('${users[s].profilePicture}', '_blank');" style="position: relative; left: 50%; transform: translateX(-50%); width: 30%; aspect-ratio: 1/1; border-radius: 100%; overflow: hidden; background-image: url('${users[s].profilePicture}'); background-position: center; background-repeat: no-repeat; background-size: cover;"></div><br>
                                 <b style="width: 100%; text-align: center; left: 0%; position: relative; display: inline-block;">${users[s].name}</b><br><br>
                                 Class Teacher of&nbsp;${users[s].classTeacher}<hr>
                                 Subject: ${users[s].subject}<hr>
@@ -596,9 +593,7 @@ for (let d = 0; d < navList.length; d++) {
                                     if (conf == true) {
                                         delBtn.disabled = true;
                                         delBtn.innerHTML = "Deleting"
-                                        console.log("Deleting file")
                                         deleteObject(stRef(storage, `staffProfile/${localStorage.userId}/Profile Picture`)).then(() => {
-                                            console.log("Deleting Data")
                                             writeData(`startup/users/${localStorage.userId}`, "", function() {
                                                 data.users[localStorage.userId] = "";
                                                 document.getElementById("Staff Profile Btn").click()
@@ -934,8 +929,9 @@ document.getElementById("staffProfileBtn").onclick = function () {
     titleText(holder, "Your Profile")
     let spName = textInput(holder, "Name");
     boldText(holder, "Profile Picture")
+    let spFile = undefined;
     let spPreview = document.createElement("div");
-    spPreview.style = "width: 100%; height: 20vw; overflow: hidden; border-radius: 100%; background-image: url(''); background-position: center; background-repeat: no-repeat; background-size: contain;";
+    spPreview.style = "position: relative; left: 50%; transform: translateX(-50%); height: 20vw; aspect-ratio: 1/1; overflow: hidden; border-radius: 100%; background-image: url(''); background-position: center; background-repeat: no-repeat; background-size: cover;";
     spPreview.hidden = true;
     holder.appendChild(spPreview);
     let spInp = document.createElement("input");
@@ -952,10 +948,26 @@ document.getElementById("staffProfileBtn").onclick = function () {
     spInpBtn.onclick = function() {
         spInp.click();
     }
-    spInp.onchange = function() {
-        spInpBtn.innerHTML = `${this.files[0].name}<br>Click to change`;
-        spPreview.hidden = false;
-            spPreview.style.backgroundImage = `url('${URL.createObjectURL(spInp.files[0])}')`
+    spInp.oninput = function() {
+        if (spInp.files[0] != undefined) {
+            spInpBtn.disabled = true;
+            spInpBtn.innerHTML = `Compressing Image<br>Please wait`;
+            let spDiv = document.createElement("div");
+            spDiv.style = "position: fixed; left: -500px; width: 480px; height: 480px; overflow: hidden; background-image: url(''); background-position: center; background-repeat: no-repeat; background-size: cover;"
+            document.body.appendChild(spDiv);
+            spDiv.style.backgroundImage = `url('${URL.createObjectURL(spInp.files[0])}')`
+            html2canvas(spDiv, {
+                scale: 1,
+            }).then(canvas => {
+                spPreview.hidden = false;
+                const imgData = canvas.toDataURL('image/png');
+                let convFile = dataURLtoFile(imgData, spInp.files[0].name)
+                spFile = convFile;
+                spPreview.style.backgroundImage = `url('${URL.createObjectURL(convFile)}')`;
+                spInpBtn.disabled = false;
+                spInpBtn.innerHTML = `${spInp.files[0].name} - ${(convFile.size/1024).toFixed(2)} KB<br>Click to change`;
+            });
+        }
     }
     let spSubject = textInput(holder, "Subject");
     let spClassTeacher = textInput(holder, "Class Teacher");
@@ -974,13 +986,13 @@ document.getElementById("staffProfileBtn").onclick = function () {
             email: spEmail.value.trim()
         };
         if (tempData.name != "" && tempData.subject != "" && tempData.classTeacher != "" && tempData.classes != "" && tempData.phoneNumber != "" && tempData.email != "") {
-            if (spInp.files.length != 0) {
+            if (spFile != undefined) {
                 uploadBtn.disabled = true;
                 uploadBtn.innerHTML = "Uploading Profile Picture"
                 let storageRef = stRef(storage, `staffProfile/${localStorage.userId}/Profile Picture`)
-                let task = uploadBytesResumable(storageRef, spInp.files[0]);
+                let task = uploadBytesResumable(storageRef, spFile);
                 task.on('state_changed', (snapshot) => {
-                    let progress = `${(snapshot.bytesTransferred / 1024 / 1024).toFixed(2)}mb / ${(snapshot.totalBytes / 1024 / 1024).toFixed(2)}mb`;
+                    let progress = `${(snapshot.bytesTransferred / 1024).toFixed(2)} KB / ${(snapshot.totalBytes / 1024 / 1024).toFixed(2)}mb`;
                     uploadBtn.innerHTML = ("Uploading Profile Picture<br>"+progress)
                 }, 
                 (error) => {
@@ -993,7 +1005,6 @@ document.getElementById("staffProfileBtn").onclick = function () {
                         writeData(`startup/users/${localStorage.userId}`, tempData, function() {
                             closeBtn.click();
                             data.users[localStorage.userId] = tempData;
-                            console.log(data)
                             document.getElementById("Staff Profile Btn").click();
                         });
                     })
@@ -1044,3 +1055,5 @@ for (let x of contacts) {
     document.getElementById("contactsDiv").appendChild(div);
     document.getElementById("contactsDiv").appendChild(document.createElement("br"));
 };
+
+// Handle Database Updates
