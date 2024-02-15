@@ -154,3 +154,25 @@ function dataURLtoFile(dataurl, filename) {
     }
     return new File([u8arr], filename, {type:mime});
 }
+function getDate(time) {
+    return(`${time.getFullYear()}-${(time.getMonth() + 1).toString().padStart(2, "0")}-${time.getDate().toString().padStart(2, "0")}`);
+}
+function getTimeDifference(now, then) {
+    let timeNow = new Date(now);
+    let timeThen = new Date(then);
+    let hour = timeNow.getHours() - timeThen.getHours();
+    let min = timeNow.getMinutes() - timeThen.getMinutes();
+    let sec = timeNow.getSeconds() - timeThen.getSeconds();
+    if (sec < 0) {
+        sec = 60 + sec;
+        min -= 1;
+    }
+    if (min < 0) {
+        min = 60 + min;
+        hour -= 1;
+    }
+    if (hour < 0) {
+        hour = 0;
+    }
+    return(`${hour}-${min}-${sec}`)
+}

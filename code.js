@@ -315,7 +315,7 @@ for (let d = 0; d < navList.length; d++) {
                         <hr style="width: 100%;">
                         <b style="display: block; font-size: 5vw; margin-top: 10px;">${dataStorage.announcements[y][x].heading}</b><br>
                         <a style="font-size: 4vw; color: blue;">Click to open full announcement</a>`;
-                        if (dataStorage.announcements[y][x].uid == localStorage.userId) {
+                        if (dataStorage.announcements[y][x].uid == localStorage.userId && parseInt(getTimeDifference(Date.now(), parseInt(x)).split("-")[0]) < 1) {
                             let delBtn = document.createElement("button");
                             delBtn.id = x;
                             delBtn.innerHTML = "Delete Announcement";
@@ -369,7 +369,7 @@ for (let d = 0; d < navList.length; d++) {
                         <b style="font-size: 4vw;">Reason: ${dataStorage.casualLeaves[y][x].reason}</b>
                         <b style="display: block; font-size: 4vw; margin-top: 10px; color: #3A3B3C;">${dataStorage.casualLeaves[y][x].type}</b><br>
                         <a style="font-size: 4vw; color: blue;">Click to open more details</a>`
-                        if (dataStorage.casualLeaves[y][x].uid == localStorage.userId) {
+                        if (dataStorage.casualLeaves[y][x].uid == localStorage.userId && parseInt(getTimeDifference(Date.now(), parseInt(x)).split("-")[0]) < 1) {
                             let delBtn = document.createElement("button");
                             delBtn.id = x;
                             delBtn.innerHTML = "Cancel Leave";
@@ -429,7 +429,7 @@ for (let d = 0; d < navList.length; d++) {
                         <b style="font-size: 4vw;">Purpose: ${dataStorage.inCampusLeaves[y][x].purpose}</b>
                         <b style="display: block; font-size: 4vw; margin-top: 10px; color: #3A3B3C;">${dataStorage.inCampusLeaves[y][x].period}</b><br>
                         <a style="font-size: 4vw; color: blue;">Click to open more details</a>`
-                        if (dataStorage.inCampusLeaves[y][x].uid == localStorage.userId) {
+                        if (dataStorage.inCampusLeaves[y][x].uid == localStorage.userId && parseInt(getTimeDifference(Date.now(), parseInt(x)).split("-")[0]) < 1) {
                             let delBtn = document.createElement("button");
                             delBtn.id = x;
                             delBtn.innerHTML = "Cancel Leave";
@@ -490,7 +490,7 @@ for (let d = 0; d < navList.length; d++) {
                         <b style="font-size: 4vw; color: #3A3B3C;">${dataStorage.studyReports[y][x].study}</b>
                         <b style="display: block; font-size: 4vw; margin-top: 10px;">${dataStorage.studyReports[y][x].absentee.replaceAll("\n", "<br>")}</b><br>
                         <a style="font-size: 4vw; color: blue;">Click to open more details</a>`
-                        if (dataStorage.studyReports[y][x].uid == localStorage.userId) {
+                        if (dataStorage.studyReports[y][x].uid == localStorage.userId && parseInt(getTimeDifference(Date.now(), parseInt(x)).split("-")[0]) < 1) {
                             let delBtn = document.createElement("button");
                             delBtn.id = x;
                             delBtn.innerHTML = "Delete Report";
