@@ -28,7 +28,6 @@
     top: 0%;
     overflow: auto;
     overflow-wrap: break-word;
-    scroll-behavior: smooth;
 }
 .about {
     border-width: 0px 0px 1px 0px;
