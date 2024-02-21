@@ -1139,6 +1139,15 @@ onDataUpdate(`announcements/${getTodayDate()}`, function(res) {
     }
     if (getScreen() != null && getScreen().id == "Announcements") {
         loadAnnouncements()
+    } else {
+        if (res != undefined && res != null) {
+            if (menuRedDot == undefined) {
+                menuRedDot = redDot(document.getElementById("navBtn"), `0%`, `0%`);
+            }
+            if (announcementsRedDot == undefined) {
+                announcementsRedDot = redDot(document.getElementById("Announcements Btn"), `0%`, `0%`)
+            }
+        }
     }
 })
 onDataUpdate(`casualLeaves/${getTodayDate()}`, function(res) {
