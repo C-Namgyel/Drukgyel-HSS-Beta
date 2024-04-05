@@ -1,10 +1,54 @@
-// TODO
-/*
-line 1143
-Add the data update feature
-Make the GUI a little better with stylings.
-*/
+// Service Worker
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      navigator.serviceWorker
+        .register("/serviceWorker.js")
+        .then(res => console.log("service worker registered"))
+        .catch(err => console.log("service worker not registered", err))
+    })
+}
 
+// App installer
+var deferredPrompt;
+
+// Listen for the 'beforeinstallprompt' event
+window.addEventListener('beforeinstallprompt', (e) => {
+    deferredPrompt = e;
+    let installBanner = document.createElement("div");
+    installBanner.style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: #0989EC; color: white; padding-top: 5%; padding-bottom: 5%; text-align: center; z-index: 1000;";
+    let img = document.createElement("img");
+    img.src = "assets/logo.png";
+    img.style = "height: 12vw; vertical-align: middle;";
+    img.alt = "Drukgyel HSS";
+    let span = document.createElement("span");
+    span.style = "margin-left: 10px; font-size: 5vw;";
+    span.innerHTML = "Install Drukgyel HSS";
+    let installButton = document.createElement("button");
+    installButton.style = "margin-left: 10px; background-color: white; color: #0989EC; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px; font-size: 3vw;";
+    installButton.innerHTML = "Install";
+    let closeButton = document.createElement("button");
+    closeButton.style = "background-color: transparent; color: white; border: none; cursor: pointer; position: absolute; top: 5px; right: 0%; background-color: red; font-size: 3vw;";
+    closeButton.innerHTML = "&times;";
+    installBanner.appendChild(img);
+    installBanner.appendChild(span);
+    installBanner.appendChild(installButton);
+    installBanner.appendChild(closeButton);
+    document.body.appendChild(installBanner);
+    installButton.onclick = function() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    closeButton.click();
+                }
+                deferredPrompt = null;
+            });
+        }
+    };
+    closeButton.onclick = function() {
+        installBanner.remove();
+    }
+});
 
 // Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
@@ -67,7 +111,6 @@ function writeData(path, data, code) {
         code();
     });
 };
-
 function deleteData(path, code) {
     remove(ref(database, path)).then(() => {
         code()
@@ -198,6 +241,16 @@ function removeMenuRedDot() {
         menuRedDot = undefined;
     }
 }
+function filterObject(obj, searchTerm) {
+    searchTerm = searchTerm.toLowerCase();
+    return Object.fromEntries(
+        Object.entries(obj).filter(([key, value]) => {
+            return Object.values(value).some(val =>
+                typeof val === 'string' && val.toLowerCase().includes(searchTerm)
+            );
+        })
+    );
+}
 
 // Setup startup screen
 function startup() {
@@ -250,6 +303,7 @@ function startup() {
 // Global Variables
 var data = {};
 var dataStorage = {
+    FUT: {},
     announcements: {},
     casualLeaves: {},
     inCampusLeaves: {},
@@ -263,28 +317,41 @@ var loading = "loading"
 if ((navigator.onLine ? "Online" : "Offline") == "Offline") {
     loading = "Failed"
 }
-document.getElementById("splashLogo").onanimationend = function () {
-    setTimeout(function () {
-        splash = true;
-        if (Object.keys(data).length != 0) {
-            document.getElementById("splashDiv").remove();
-            loading = "Loaded";
-            startup()
-        } else {
-            if (loading == "loading") {
-                document.getElementById("splashLoad").innerHTML = "Loading Data<br>Please Wait";
+var splashed = false;
+function splashEnded() {
+    if (splashed == false) {
+        splashed = true;
+        console.log("Splash came to an end")
+        setTimeout(function () {
+            console.log("Splash Done")
+            splash = true;
+            if (Object.keys(data).length != 0) {
+                document.getElementById("splashDiv").remove();
+                loading = "Loaded";
+                startup()
             } else {
-                document.getElementById("splashLoad").innerHTML = "No Internet Connection";
-            }
-            setTimeout(function() {
                 if (loading == "loading") {
-                    document.getElementById("splashLoad").innerHTML = "Unstable Network<br>Please Try Again Later";
+                    document.getElementById("splashLoad").innerHTML = "Loading Data<br>Please Wait";
+                } else {
+                    document.getElementById("splashLoad").innerHTML = "No Internet Connection";
                 }
-            }, 5000);
-        };
-    }, 500);
+                setTimeout(function() {
+                    if (loading == "loading") {
+                        document.getElementById("splashLoad").innerHTML = "Unstable Network<br>Please Try Again Later";
+                    }
+                }, 5000);
+            };
+        }, 500);
+    }
+}
+document.getElementById("splashLogo").onanimationend = function () {
+    splashEnded()
 };
+setTimeout(function() {
+    splashEnded()
+}, 1500);
 getData("startup", function (res) {
+    console.log("Data Loaded")
     data = res;
 
     // Splash
@@ -305,6 +372,28 @@ getData("startup", function (res) {
     
     // About
     document.getElementById("aboutDiv").innerHTML = data.aboutSchool.replaceAll("\n", "<br>");
+
+    // Attendance
+    var classes = data.attendance;
+    let sortedKeys = Object.keys(classes)
+    .map(key => ({ key, length: key.length }))
+    .sort((a, b) => a.length - b.length)
+    .map(obj => obj.key);
+    classes = sortedKeys.reduce((acc, key) => {
+        acc[key] = classes[key];
+        return acc;
+    }, {});
+
+    document.getElementById("classListHolder").innerHTML = "";
+    for (let a of Object.keys(classes)) {
+        let btn = document.createElement("button");
+        btn.style = "margin: 2%; width: 45%; border-radius: 15px; background-color: black; color: white; font-weight: bolder; font-size: 7.5vw;";
+        btn.innerHTML = a;
+        document.getElementById("classListHolder").appendChild(btn);
+        btn.onclick = function() {
+            window.open(classes[a], "_blank")
+        };
+    };
 
     // Staff Profile
     if (data.users == undefined) {
@@ -349,12 +438,13 @@ var navList = [
     { label: "School Profile", logo: "./assets/home.svg" },
     { label: "About School", logo: "./assets/home.svg" },
     { label: "Class Attendance", logo: "./assets/attendance.svg" },
+    { label: "First Unit Test", logo: "./assets/report.svg" },
     { label: "Announcements", logo: "./assets/announcement.svg" },
     { label: "Casual Leave", logo: "./assets/sandglass.svg" },
     { label: "In Campus Leave", logo: "./assets/sandglass.svg" },
     { label: "Study Report", logo: "./assets/report.svg" },
     { label: "Staff Profile", logo: "./assets/book.svg" },
-    { label: "Staff Attendance", logo: "./assets/attendance.svg" },
+    { label: "Infraction Records", logo: "./assets/report.svg" },
     { label: "Contacts", logo: "./assets/contacts.svg" },
     { label: "About", logo: "./assets/about.svg" }
 ];
@@ -378,7 +468,9 @@ for (let d = 0; d < navList.length; d++) {
         let val = a.value.replace(" Btn", "")
         if (setScreen(val) == true) {
             // Load Datas and display in screen
-            if (val == "Announcements") {
+            if (val == "First Unit Test") {
+                loadFUT()
+            } else if (val == "Announcements") {
                 loadAnnouncements()
             } else if (val == "Casual Leave") {
                 loadCasualLeaves()
@@ -387,7 +479,12 @@ for (let d = 0; d < navList.length; d++) {
             } else if (val == "Study Report") {
                 loadStudyReports()
             } else if (val == "Staff Profile") {
-                loadStaffProfiles()
+                loadStaffProfiles(data.users)
+            } else if (val == "Infraction Records") {
+                openIR();
+                setTimeout(function() {
+                    document.getElementById("School Profile Btn").click();
+                }, 250)
             };
             document.getElementById("header").innerHTML = val;
             if (document.getElementById("navBarrier").hidden == false) {
@@ -476,49 +573,100 @@ function listLoad(data, divElem, code, oncl) {
     }
 };
 
-// Class Attendance
-var classes = [
-    {"class":"12 A", link: "https://tinyurl.com/3pcez7rs"},
-    {"class":"12 B", link: "https://tinyurl.com/t3u3yfsr"},
-    {"class":"12 C", link: "https://tinyurl.com/5fdfdtyy"},
-    {"class":"12 D", link: "https://tinyurl.com/24rh79b9"},
-    {"class":"12 E", link: "https://tinyurl.com/4f5twbsn"},
-    {"class":"11 A", link: "https://bit.ly/3EPxhs0"},
-    {"class":"11 B", link: "https://bit.ly/3EIVEYc"},
-    {"class":"11 C", link: "https://bit.ly/3ZDsD8H"},
-    {"class":"11 D", link: "https://bit.ly/3mFJ3z5"},
-    {"class":"11 E", link: "https://bit.ly/41A5Qfq"},
-    {"class":"10 A", link: "https://bit.ly/3FdDcY4"},
-    {"class":"10 B", link: "https://tinyurl.com/5ejfasxy"},
-    {"class":"10 C", link: "https://tinyurl.com/yskx9h4c"},
-    {"class":"10 D", link: "https://bit.ly/3y17fy6"},
-    {"class":"10 E", link: "https://tinyurl.com/bdee495t"},
-    {"class":"9 A", link: "https://tinyurl.com/yc4r6z3r"},
-    {"class":"9 B", link: "https://tinyurl.com/2p93jt88"},
-    {"class":"9 C", link: "https://tinyurl.com/558mdcpc"},
-    {"class":"9 D", link: "https://tinyurl.com/5hcbwdy2"},
-    {"class":"9 E", link: "https://bit.ly/3IOVboS"},
-    {"class":"8 A", link: "https://tinyurl.com/586u3p3j"},
-    {"class":"8 B", link: "https://tinyurl.com/ysft64v6"},
-    {"class":"8 C", link: "https://tinyurl.com/mvns73cx"},
-    {"class":"7 A", link: "https://tinyurl.com/2z2cnup9"},
-    {"class":"7 B", link: "https://bit.ly/3me8SpF"},
-    {"class":"7 C", link: "https://bit.ly/3J5SW0q"}
-];
-// var classes = ["12 A", "12 B", "12 C", "12 D", "12 E", "11 A", "11 B", "11 C", "11 D", "11 E", "10 A", "10 B", "10 C", "10 D", "10 E", "9 A", "9 B", "9 C", "9 D", "9 E", "8 A", "8 B", "8 C", "7 A", "7 B", "7 C"];
-document.getElementById("classListHolder").innerHTML = "";
-for (let a = 0; a < classes.length; a++) {
-    let btn = document.createElement("button");
-    btn.style = "margin: 2%; width: 45%; border-radius: 15px; background-color: black; color: white; font-weight: bolder; font-size: 7.5vw;";
-    btn.id = "attendanceBtn" + a;
-    btn.innerHTML = classes[a]["class"];
-    document.getElementById("classListHolder").appendChild(btn);
-    btn.onclick = function() {
-        let g = document.createElement("a");
-        g.href = classes[a]["link"];
-        g.target = "_blank"
-        g.click();
+// First Unit Test
+function loadFUT() {
+    let dateToday = document.getElementById("FUTFilter").value;
+    function startIt(dT) {
+        let toLoad = {}
+        toLoad[dT] = dataStorage.FUT[dT];
+        listLoad(toLoad, "FUTDiv", function(div, x, y) {
+            div.innerHTML = `<a style="font-size: 4vw; color: #555; display: block;">${getTime(x)}</a>
+            <b style="font-size: 5vw; display: block;">${dataStorage.FUT[y][x].invigilator}</b>
+            <b style="font-size: 4vw;">Exam Hall: ${dataStorage.FUT[y][x].examHall}</b>
+            <b style="display: block; font-size: 4vw; margin-top: 10px; color: #3A3B3C;">${dataStorage.FUT[y][x].remarks}</b><br>
+            <a style="font-size: 4vw; color: blue;">Click to open more details</a>`
+            if (dataStorage.FUT[y][x].uid == localStorage.userId && parseInt(getTimeDifference(Date.now(), parseInt(x)).split("-")[0]) < 1) {
+                let delBtn = document.createElement("button");
+                delBtn.id = x;
+                delBtn.innerHTML = "Delete Data";
+                div.appendChild(document.createElement("br"))
+                div.appendChild(document.createElement("br"))
+                div.appendChild(delBtn)
+                delBtn.onclick = function() {
+                    let conf = confirm("Are you sure you want to delete this data?")
+                    if (conf == true) {
+                        delBtn.disabled = true;
+                        delBtn.innerHTML = "Deleting"
+                        deleteData(`FUT/${y}/${x}`, function() {})
+                    };
+                }
+            }
+        }, function(e, x, y, f, event) {
+            if (event.target.id != x) {
+                // Change the display
+                e.innerHTML = `<b style='font-size: 25px;'>Details</b><br><br>
+                Invigilator: ${dataStorage.FUT[y][x].invigilator}<hr>
+                Exam Hall: ${dataStorage.FUT[y][x].examHall}<hr>
+                Absentee: <br>${dataStorage.FUT[y][x].absentee.replaceAll("\n", "<br>")}<hr>
+                Missing Page: <br>${dataStorage.FUT[y][x].missingPages.replaceAll("\n", "<br>")}<hr>
+                Question Paper Required: <br>${dataStorage.FUT[y][x].required.replaceAll("\n", "<br>")}<hr>
+                Remarks: ${dataStorage.FUT[y][x].remarks}`
+            } else {
+                f.click()
+            }
+        });
     };
+    if (Object.keys(dataStorage.FUT).includes(dateToday)) {
+        startIt(dateToday);
+    } else {
+        document.getElementById("FUTDiv").innerHTML = "Getting Data. Please wait."
+        getData(`FUT/${dateToday}`, function(res) {
+            if (Object.keys(res).length != 0) {
+                dataStorage.FUT[dateToday] = res;
+                startIt(dateToday);
+            } else {
+                dataStorage.FUT[dateToday] = {};
+                document.getElementById("FUTDiv").innerHTML = "<b>No Data</b>";
+            };
+        })
+    }
+}
+document.getElementById("FUTBtn").onclick = function () {
+    let csElem = createPrompt();
+    let holder = csElem[0];
+    let closeBtn = csElem[1];
+    titleText(holder, "First Unit Test");
+    let FUTInvigilator = textInput(holder, "Invigilator");
+    let FUTExamHall = textInput(holder, "Exam Hall");
+    let FUTAbsentee = textArea(holder, "Absentee (Name, Class, Section)");
+    let FUTMissingPage = textArea(holder, "Missing Page (Class, Subject, Page Number)");
+    let FUTQPRequired = textArea(holder, "Question Paper Required (Quantity, Class, Section)");
+    let FUTRemarks = textInput(holder, "Remarks (Optional)");
+    let uploadBtn = button(holder, "Upload", function() {
+        let time = new Date();
+        let ts = Date.now();
+        let data = {
+            uid: localStorage.userId,
+            invigilator: FUTInvigilator.value.trim(),
+            examHall: FUTExamHall.value.trim(),
+            absentee: FUTAbsentee.value.trim(),
+            missingPages: FUTMissingPage.value.trim(),
+            required: FUTQPRequired.value.trim(),
+            remarks: FUTRemarks.value.trim()
+        };
+        if (data.invigilator != "" && data.examHall != "" && data.absentee != "" && data.missingPages != "" && data.required != "") {
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = "Uploading...";
+            let date = `${time.getFullYear()}-${(time.getMonth() + 1).toString().padStart(2, "0")}-${time.getDate().toString().padStart(2, "0")}`
+            writeData(`FUT/${date}/${ts}`, data, function() {
+                closeBtn.click();
+                dataStorage.FUT[date] = {}
+                dataStorage.FUT[date][ts] = data;
+            });
+        } else {
+            alert("Please fill up all the information");
+        };
+    })
 };
 
 // Announcements
@@ -947,13 +1095,17 @@ document.getElementById("studyReportBtn").onclick = function () {
     });
 };
 
+//Infraction Records
+function openIR() {
+    window.open("https://forms.gle/5hEPCF5U1855uS2W6");
+}
+
 // Staff Profile
 var staffProfileRedDot = undefined;
 var staffProfileAddRedDot = [];
-function loadStaffProfiles() {
+function loadStaffProfiles(users) {
     document.getElementById("staffProfileDiv").innerHTML = "";
     document.getElementById("staffProfileDiv").appendChild(at)
-    let users = data.users;
     if (users == undefined) {
         users = {}
         data.users = {};
@@ -963,7 +1115,15 @@ function loadStaffProfiles() {
             delete users[o];
         }
     }
-    sortObject(users, "name", true)
+    let sortedData = Object.fromEntries(
+        Object.entries(users).sort(([,b], [,a]) => (a.name || '').localeCompare(b.name || ''))
+    );
+    let yourData = sortedData[localStorage.userId];
+    delete sortedData[localStorage.userId];
+    if (yourData != undefined && yourData != "") {
+        sortedData = {...sortedData, [localStorage.userId]: yourData}
+    }
+    users = sortedData;
     if (Object.keys(users).length == 0) {
         let b = document.createElement("b")
         b.innerHTML = "No Data";
@@ -1009,7 +1169,7 @@ function loadStaffProfiles() {
                             deleteObject(stRef(storage, `staffProfile/${localStorage.userId}/Profile Picture`)).then(() => {
                                 writeData(`startup/users/${localStorage.userId}`, "", function() {
                                     data.users[localStorage.userId] = "";
-                                    loadStaffProfiles()
+                                    loadStaffProfiles(data.users)
                                 })
                             });
                         };
@@ -1102,7 +1262,7 @@ document.getElementById("staffProfileBtn").onclick = function () {
                         writeData(`startup/users/${localStorage.userId}`, tempData, function() {
                             closeBtn.click();
                             data.users[localStorage.userId] = tempData;
-                            loadStaffProfiles()
+                            loadStaffProfiles(data.users)
                             staffProfileAddRedDot.remove()
                             staffProfileAddRedDot = undefined;
                             staffProfileRedDot.remove();
@@ -1119,8 +1279,28 @@ document.getElementById("staffProfileBtn").onclick = function () {
         };
     });
 };
+document.getElementById("staffProfileSearch").oninput = function() {
+    let dat = data.users;
+    for (let i of Object.keys(dat)) {
+        if (dat[i] == "") {
+            delete dat[i]
+        }
+    }
+    let filteredData = filterObject(dat, this.value);
+    loadStaffProfiles(filteredData)
+}
 
 // Handle Database Updates
+onDataUpdate(`FUT/${getTodayDate()}`, function(res) {
+    if (res != undefined && res != null) {
+        dataStorage.FUT[getTodayDate()] = res;
+    } else {
+        dataStorage.FUT = {}
+    }
+    if (getScreen() != null && getScreen().id == "First Unit Test") {
+        loadFUT();
+    }
+})
 onDataUpdate(`announcements/${getTodayDate()}`, function(res) {
     if (res != undefined && res != null) {
         dataStorage.announcements[getTodayDate()] = res;
@@ -1172,9 +1352,9 @@ onDataUpdate(`inCampusLeaves/${getTodayDate()}`, function(res) {
 })
 onDataUpdate(`studyReports/${getTodayDate()}`, function(res) {
     if (res != undefined && res != null) {
-        dataStorage.inCampusLeaves[getTodayDate()] = res;
+        dataStorage.studyReports[getTodayDate()] = res;
     } else {
-        dataStorage.inCampusLeaves = {}
+        dataStorage.studyReports = {}
     }
     if (getScreen() != null && getScreen().id == "Study Report") {
         loadStudyReports()

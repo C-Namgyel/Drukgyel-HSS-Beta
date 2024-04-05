@@ -1,3 +1,9 @@
+.header {
+    background-color: #4CAF50;
+    color: #ffffff;
+}
+
+/* Animations */
 @keyframes splash {
     0% {scale: 0%;}
     100% {scale: 100%;}

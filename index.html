@@ -2,8 +2,13 @@
     <head>
         <title>Drukgyel HSS</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#000000" />
         <link rel="stylesheet" href="style.css">
         <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+        <link rel="manifest" href="manifest.json" />
+        <!-- ios support -->
+        <link rel="apple-touch-icon" href="./assets/logo.png" />
+        <meta name="apple-mobile-web-app-status-bar" content="#db4938" />
     </head>
     <body>
         <!-- Splash Screen -->
@@ -11,7 +16,6 @@
             <div id="splashLogo" style="width: 50%; height: 50%; position: absolute; left: 25%; top: 25%; scale: 0; background-image: url('assets/logo.png'); background-position: center; background-repeat: no-repeat; background-size: contain; animation-name: splash; animation-duration: 0.75s; animation-fill-mode: forwards; animation-timing-function: cubic-bezier(0, 0.75, 1);"></div>
             <b id="splashLoad" style="width: 100%; position: absolute; top: 75%; text-align: center; font-size: 7vw;"></b>
         </div>
-
         <!-- Heading -->
         <div style="width: 100%; height: 75px; position: fixed; top: 0%; left: 0%; background-image: linear-gradient(#0989EC, #0989EC, #0989EC, #0989EC, white); text-align: center; font-size: 30px; color: white; line-height: 62.5px; z-index: 1;">
             <b id="header">School Profile</b>
@@ -50,6 +54,15 @@
                 <b style="font-size: 25px; width: 100%; text-align: center;">Loading...</b>
             </div>
         </div>
+        <div id="First Unit Test" class="scrn" hidden>
+            <div style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
+                <b style="font-size: 4vw;">Filter by Date:</b>&nbsp;<input class="filterDate" id="FUTFilter" type="date" style="font-size: 4vw;">
+            </div>
+            <div id="FUTDiv" style="position: absolute; width: 90%; left: 5%; top: 125px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
+                <div class="at"></div>
+            </div>
+            <button class="addButton" id="FUTBtn">+</button>
+        </div>
         <div id="Announcements" class="scrn" hidden>
             <div style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
                 <b style="font-size: 4vw;">Filter by Date:</b>&nbsp;<input class="filterDate" id="announcementFilter" type="date" style="font-size: 4vw;">
@@ -87,18 +100,15 @@
             <button class="addButton" id="studyReportBtn">+</button>
         </div>
         <div id="Staff Profile" class="scrn" hidden>
+            <div style="position: absolute; width: 90%; left: 5%; top: 80px; overflow: auto; overflow-wrap: break-word; text-align: center;">
+                <input id="staffProfileSearch" style="width: 90%; position: relative;" placeholder="Search">
+            </div>
             <div id="staffProfileDiv" style="position: absolute; width: 90%; left: 5%; top: 125px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">
                 <div class="at"></div>
             </div>
             <button class="addButton" id="staffProfileBtn">+</button>
         </div>
-        <div id="Staff Attendance" class="scrn" hidden>
-            <div style="position: absolute; width: 90%; left: 5%; top: 85; text-align: center;">
-                <b>This link pertains to the documentation of staff attendance during school-related occasions.</b><br><br>
-                <button onclick="window.open('https://tinyurl.com/mry29b6w', '_blank')">Click Here to Take Attendance</button><br><br>
-                <p style="text-align: left;">Note:<br>
-                Only School administrations can record the attendance.</p>
-            </div>
+        <div id="Infraction Records" class="scrn" hidden>
         </div>
         <div id="Contacts" class="scrn" hidden>
             <div id="contactsDiv" style="position: absolute; width: 90%; left: 5%; top: 85px; font-size: 5vw; overflow: auto; overflow-wrap: break-word;">

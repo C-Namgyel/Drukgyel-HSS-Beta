@@ -36,21 +36,13 @@ function navClose() {
     }, 500)
 }
 function sortObject(data, sortBy, aToZ) {
-    data = Object.entries(data);
-    data.sort((a, b) => {
-        let valA = a[1][sortBy].toLowerCase();
-        let valB = b[1][sortBy].toLowerCase();
-        if (aToZ) {
-            return valA.localeCompare(valB);
-        } else {
-            return valB.localeCompare(valA);
-        }
-    });
-    let sortedObject = {};
-    data.forEach(entry => {
-        sortedObject[entry[0]] = entry[1];
-    });
-    return sortedObject;
+    let sortedData;
+    if (aToZ == true) {
+        sortedData = Object.fromEntries(Object.entries(data).sort(([,a], [,b]) => (a[sortBy] || '').localeCompare(b[sortBy] || '')));
+    } else {
+        sortedData = Object.fromEntries(Object.entries(data).sort(([,b], [,a]) => (a[sortBy] || '').localeCompare(b[sortBy] || '')));
+    }
+    return sortObject;
 }
 function previousDate(time) {
     let tempDate = time.split("-");
