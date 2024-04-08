@@ -593,12 +593,13 @@ function loadFUT() {
                 div.appendChild(document.createElement("br"))
                 div.appendChild(delBtn)
                 delBtn.onclick = function() {
-                    let conf = confirm("Are you sure you want to delete this data?")
-                    if (conf == true) {
-                        delBtn.disabled = true;
-                        delBtn.innerHTML = "Deleting"
-                        deleteData(`FUT/${y}/${x}`, function() {})
-                    };
+                    verify("Are you sure you want to delete this data?", function(conf) {
+                        if (conf == true) {
+                            delBtn.disabled = true;
+                            delBtn.innerHTML = "Deleting"
+                            deleteData(`FUT/${y}/${x}`, function() {})
+                        };
+                    });
                 }
             }
         }, function(e, x, y, f, event) {
@@ -637,10 +638,10 @@ document.getElementById("FUTBtn").onclick = function () {
     let closeBtn = csElem[1];
     titleText(holder, "First Unit Test");
     let FUTInvigilator = textInput(holder, "Invigilator");
-    let FUTExamHall = textInput(holder, "Exam Hall");
+    let FUTExamHall = dropdown(holder, "Exam Hall", ["7A","7B","7C","8A","8B","8C","9A","9B","9C","9D","9E","10A","10B","10C","10D","10E","11A","11B","11C","11D","11E","12A","12B","12C","12D","12E"]);
     let FUTAbsentee = textArea(holder, "Absentee (Name, Class, Section)");
-    let FUTMissingPage = textArea(holder, "Missing Page (Class, Subject, Page Number)");
-    let FUTQPRequired = textArea(holder, "Question Paper Required (Quantity, Class, Section)");
+    let FUTMissingPage = textArea(holder, "Missing Page (Class, Section, Subject, Page Number)");
+    let FUTQPRequired = textArea(holder, "Question Paper Required (Class, Section, Subject, Quantity)");
     let FUTRemarks = textInput(holder, "Remarks (Optional)");
     let uploadBtn = button(holder, "Upload", function() {
         let time = new Date();
@@ -664,7 +665,7 @@ document.getElementById("FUTBtn").onclick = function () {
                 dataStorage.FUT[date][ts] = data;
             });
         } else {
-            alert("Please fill up all the information");
+            notify("Please fill up all the information");
         };
     })
 };
@@ -704,12 +705,13 @@ function loadAnnouncements() {
                 div.appendChild(document.createElement("br"))
                 div.appendChild(delBtn)
                 delBtn.onclick = function() {
-                    let conf = confirm("Are you sure you want to delete this announcement?")
-                    if (conf == true) {
-                        delBtn.disabled = true;
-                        delBtn.innerHTML = "Deleting"
-                        deleteData(`announcements/${y}/${x}`, function() {})
-                    };
+                    verify("Are you sure you want to delete this announcement?", function(conf) {
+                        if (conf == true) {
+                            delBtn.disabled = true;
+                            delBtn.innerHTML = "Deleting"
+                            deleteData(`announcements/${y}/${x}`, function() {})
+                        };
+                    });
                 }
             }
         }, function(e, x, y, f, event) {
@@ -756,20 +758,22 @@ document.getElementById("announcementBtn").onclick = function () {
     let annTo = dropdown(holder, "Announcement for", ["Captains", "Everyone", "Students", "Teachers", "Others"])
     annTo.onchange = function() {
         if (annTo.value == "Others") {
-            let to = "";
-            while (to.trim() == "") {
-                to = prompt("This announcement is for: ")
-                if (to == null) {
-                    annTo.firstChild.selected = true;
-                    break;
-                } else if (to.trim() != "") {
-                    let elem = document.createElement("option");
-                    elem.innerHTML = to;
-                    elem.style = "color: black;"
-                    elem.selected = true;
-                    annTo.insertBefore(elem, annTo.lastChild);
-                }
+            function sss() {
+                inquire("This announcement is for:", "", function(to) {
+                    if (to == null) {
+                        annTo.firstChild.selected = true;
+                    } else if (to.trim() != "") {
+                        let elem = document.createElement("option");
+                        elem.innerHTML = to;
+                        elem.style = "color: black;"
+                        elem.selected = true;
+                        annTo.insertBefore(elem, annTo.lastChild);
+                    } else {
+                        sss();
+                    }
+                })
             }
+            sss();
         }
     }
     let annHeading = textInput(holder, "Heading")
@@ -799,7 +803,8 @@ document.getElementById("announcementBtn").onclick = function () {
                 dataStorage.announcements[date][ts] = data;
             });
         } else {
-            alert("Please fill up all the information");
+            console.log(getScreen());
+            notify("Please fill up all the information");
         };
     })
 };
@@ -824,12 +829,13 @@ function loadCasualLeaves() {
                 div.appendChild(document.createElement("br"))
                 div.appendChild(delBtn)
                 delBtn.onclick = function() {
-                    let conf = confirm("Are you sure you want to cancel your leave?")
-                    if (conf == true) {
-                        delBtn.disabled = true;
-                        delBtn.innerHTML = "Canceling"
-                        deleteData(`casualLeaves/${y}/${x}`, function() {})
-                    };
+                    verify("Are you sure you want to cancel your leave?", function(conf) {
+                        if (conf == true) {
+                            delBtn.disabled = true;
+                            delBtn.innerHTML = "Canceling"
+                            deleteData(`casualLeaves/${y}/${x}`, function() {})
+                        };
+                    });
                 }
             }
         }, function(e, x, y, f, event) {
@@ -896,7 +902,7 @@ document.getElementById("casualLeaveBtn").onclick = function () {
                 dataStorage.casualLeaves[date][ts] = data;
             });
         } else {
-            alert("Please fill up all the information");
+            notify("Please fill up all the information");
         };
     })
 };
@@ -921,15 +927,16 @@ function loadInCampusLeaves() {
                 div.appendChild(document.createElement("br"))
                 div.appendChild(delBtn)
                 delBtn.onclick = function() {
-                    let conf = confirm("Are you sure you want to cancel your leave?")
-                    if (conf == true) {
-                        delBtn.disabled = true;
-                        delBtn.innerHTML = "Canceling"
-                        deleteData(`inCampusLeaves/${y}/${x}`, function() {})
-                        .catch((error) => {
-                            console.error("Error deleting data: ", error);
-                        });
-                    };
+                    verify("Are you sure you want to cancel your leave?", function(conf) {
+                        if (conf == true) {
+                            delBtn.disabled = true;
+                            delBtn.innerHTML = "Canceling"
+                            deleteData(`inCampusLeaves/${y}/${x}`, function() {})
+                            .catch((error) => {
+                                console.error("Error deleting data: ", error);
+                            });
+                        };
+                    });
                 }
             }
         }, function(e, x, y, f, event) {
@@ -1000,7 +1007,7 @@ document.getElementById("campusLeaveBtn").onclick = function () {
                 dataStorage.inCampusLeaves[date][ts] = data;
             });
         } else {
-            alert("Please fill up all the information");
+            notify("Please fill up all the information");
         };
     });
 };
@@ -1025,12 +1032,13 @@ function loadStudyReports() {
                 div.appendChild(document.createElement("br"))
                 div.appendChild(delBtn)
                 delBtn.onclick = function() {
-                    let conf = confirm("Are you sure you want to delete this report?")
-                    if (conf == true) {
-                        delBtn.disabled = true;
-                        delBtn.innerHTML = "Deleting"
-                        deleteData(`studyReports/${y}/${x}`, function() {})
-                    };
+                    verify("Are you sure you want to delete this report?", function(conf) {
+                        if (conf == true) {
+                            delBtn.disabled = true;
+                            delBtn.innerHTML = "Deleting"
+                            deleteData(`studyReports/${y}/${x}`, function() {})
+                        };
+                    });
                 }
             }
         }, function(e, x, y, f, event) {
@@ -1090,7 +1098,7 @@ document.getElementById("studyReportBtn").onclick = function () {
                 dataStorage.studyReports[date][ts] = data;
             });
         } else {
-            alert("Please fill up all the information");
+            notify("Please fill up all the information");
         };
     });
 };
@@ -1162,17 +1170,18 @@ function loadStaffProfiles(users) {
                     div.appendChild(document.createElement("br"))
                     div.appendChild(delBtn)
                     delBtn.onclick = function() {
-                        let conf = confirm("Are you sure you want to delete your profile?")
-                        if (conf == true) {
-                            delBtn.disabled = true;
-                            delBtn.innerHTML = "Deleting"
-                            deleteObject(stRef(storage, `staffProfile/${localStorage.userId}/Profile Picture`)).then(() => {
-                                writeData(`startup/users/${localStorage.userId}`, "", function() {
-                                    data.users[localStorage.userId] = "";
-                                    loadStaffProfiles(data.users)
-                                })
-                            });
-                        };
+                        verify("Are you sure you want to delete your profile?", function(conf) {
+                            if (conf == true) {
+                                delBtn.disabled = true;
+                                delBtn.innerHTML = "Deleting"
+                                deleteObject(stRef(storage, `staffProfile/${localStorage.userId}/Profile Picture`)).then(() => {
+                                    writeData(`startup/users/${localStorage.userId}`, "", function() {
+                                        data.users[localStorage.userId] = "";
+                                        loadStaffProfiles(data.users)
+                                    })
+                                });
+                            };
+                        });
                     }
                 }
             }
@@ -1272,10 +1281,10 @@ document.getElementById("staffProfileBtn").onclick = function () {
                     })
                 });
             } else {
-                alert("Please upload a profile picture");
+                notify("Please upload a profile picture");
             };
         } else {
-            alert("Please fill up all the information");
+            notify("Please fill up all the information");
         };
     });
 };
