@@ -1,6 +1,6 @@
 {
-    "name": "Drukgyel HSS",
-    "short_name": "Drukgyel HSS",
+    "name": "Drukgyel HSS Beta",
+    "short_name": "Drukgyel HSS Beta",
     "start_url": "./index.html",
     "display": "standalone",
     "background_color": "#ffffff",
